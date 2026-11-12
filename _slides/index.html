@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Qubits Are Vectors Too / CloudBrew 2026</title>
+  <style>
+    @font-face { font-family: "Open Sans"; font-weight: 400; src: url("../_resources/fonts/OpenSans-Regular.ttf") format("truetype"); }
+    @font-face { font-family: Montserrat; font-weight: 700; src: url("../_resources/fonts/Montserrat-Bold.ttf") format("truetype"); }
+    :root { color-scheme: dark; background: #050f4a; color: #e2e7f4; font-family: "Open Sans", Arial, sans-serif; }
+    body { margin: 0; min-height: 100vh; display: grid; grid-template-rows: 1fr auto; }
+    main { display: grid; place-items: center; min-height: 0; }
+    img { display: block; width: min(100vw, calc((100vh - 70px) * 16 / 9)); height: auto; }
+    nav { display: flex; gap: 20px; align-items: center; justify-content: center; padding: 14px; background: #050f4a; border-top: 2px solid #e7d450; }
+    button, a { color: #e7d450; background: #091b68; border: 1px solid #e7d450; border-radius: 6px; padding: 8px 14px; font: 700 14px Montserrat, sans-serif; }
+    button:not(:disabled):hover, a:hover { color: #050f4a; background: #e7d450; }
+    button { cursor: pointer; }
+    button:disabled { opacity: .4; cursor: default; }
+    :focus-visible { outline: 3px solid #f6f0c0; outline-offset: 3px; }
+    #status { min-width: 55px; text-align: center; }
+    @media (max-width: 560px) { nav { flex-wrap: wrap; gap: 8px; } }
+  </style>
+</head>
+<body>
+  <main><img id="slide" src="slide-01.svg" alt="Slide 1: Qubits Are Vectors Too"></main>
+  <nav aria-label="Slide navigation">
+    <button id="previous" type="button">Previous</button>
+    <span id="status" aria-live="polite">1 / 61</span>
+    <button id="next" type="button">Next</button>
+    <a id="source" href="slide-01.svg">Open SVG</a>
+    <a href="slide-template.svg">Blank template</a>
+  </nav>
+  <script>
+    const titles = [
+      "Qubits Are Vectors Too", "Johnny Hooyberghs", "Scan to visit the repository",
+      "Agenda", "Introduction", "Paper folding to the Moon: question",
+      "Paper folding to the Moon: answer",
+      "Molecular chemistry & DNA", "Global logistics & supply chains", "Cryptography & security",
+      "Electron spin", "Schrödinger's cat", "Entangled electrons",
+      "A Feynman quote",
+      "A quantum computer", "Vacuum tube computing", "Superconducting qubits",
+      "Neutral atom qubits", "Topological qubits & Majorana quasiparticles",
+      "Quantum Math", "Classical bits", "Quantum bits or qubits",
+      "Qubits in superposition", "Normalized qubit amplitudes", "Complex qubit amplitudes",
+      "Two qubits: four amplitudes", "More qubits, exponentially more amplitudes", "Vectors",
+      "The Bloch sphere", "Ket zero", "Ket one", "A perfect 50/50 superposition", "From amplitudes to Bloch angles",
+      "Two qubits and the joint state", "Tensor product of two state columns",
+      "Quantum Logic",
+      "H gate: circuit and matrix", "H gate: matrix multiplication", "H gate: Bloch-sphere rotation",
+      "X gate: circuit and matrix", "X gate: matrix multiplication", "X gate: Bloch-sphere rotation",
+      "Y gate: circuit and matrix", "Y gate: matrix multiplication", "Y gate: Bloch-sphere rotation",
+      "Z gate: circuit and matrix", "Z gate: matrix multiplication", "Z gate: Bloch-sphere rotation",
+      "CNOT gate: circuit and matrix", "CNOT gate: matrix multiplication", "CNOT gate: entangling two qubits",
+      "Bell state, part 1: H and tensor product", "Bell state, part 2: CNOT entangles",
+      "Quantum Code",
+      "Your first qubit in Q#", "Flip a qubit with the X gate",
+      "Create a superposition with H",
+      "A 25% / 75% superposition with Ry",
+      "Entangle two qubits with H and CNOT",
+      "Example 6: Shor's algorithm in Q#",
+      "Thank you and questions"
+    ];
+    let current = 0;
+    const slide = document.getElementById("slide");
+    const previous = document.getElementById("previous");
+    const next = document.getElementById("next");
+    function show(index) {
+      current = Math.max(0, Math.min(titles.length - 1, index));
+      const file = `slide-${String(current + 1).padStart(2, "0")}.svg`;
+      slide.src = file;
+      slide.alt = `Slide ${current + 1}: ${titles[current]}`;
+      document.getElementById("source").href = file;
+      document.getElementById("status").textContent = `${current + 1} / ${titles.length}`;
+      previous.disabled = current === 0;
+      next.disabled = current === titles.length - 1;
+    }
+    previous.addEventListener("click", () => show(current - 1));
+    next.addEventListener("click", () => show(current + 1));
+    document.addEventListener("keydown", event => {
+      if (event.target.closest("button, a, input, textarea, select") || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (["ArrowRight", "PageDown", " ", "ArrowLeft", "PageUp", "Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        if (["ArrowRight", "PageDown", " "].includes(event.key)) show(current + 1);
+        if (["ArrowLeft", "PageUp"].includes(event.key)) show(current - 1);
+        if (event.key === "Home") show(0);
+        if (event.key === "End") show(titles.length - 1);
+      }
+    });
+    show(0);
+  </script>
+</body>
+</html>
