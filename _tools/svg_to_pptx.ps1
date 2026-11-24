@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$SvgDir = (Join-Path (Split-Path $PSScriptRoot -Parent) '_slides'),
+    [string]$SvgDir = (Join-Path (Split-Path $PSScriptRoot -Parent) 'slides'),
     [string]$Output = (Join-Path (Split-Path $PSScriptRoot -Parent) 'QubitsAreVectorsToo-CloudBrew-2026.pptx'),
     [string]$EdgePath
 )

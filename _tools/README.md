@@ -1,6 +1,6 @@
 # Presentation tools
 
-The reference deck uses numbered SVG sources in `_slides`, a reusable SVG
+The reference deck uses numbered SVG sources in `slides`, a reusable SVG
 template, and a full-bleed image-based PowerPoint export. This repository keeps
 that structure. The tools use PowerShell and Microsoft Edge, with no Python,
 Node.js, or package installation required.
@@ -57,7 +57,7 @@ with a 294 x 75 size, above the footer area.
 Custom input and output:
 
 ```powershell
-.\_tools\svg_to_pptx.ps1 -SvgDir .\_slides -Output .\MyDeck.pptx
+.\_tools\svg_to_pptx.ps1 -SvgDir .\slides -Output .\MyDeck.pptx
 ```
 
 The exporter collects only `slide-NN.svg` files, sorts them by name, renders each
@@ -76,7 +76,7 @@ the exported slides; they do not need to be installed to view the deck.
 
 ## Preview
 
-Open `_slides\index.html` in a browser, without a server or internet connection.
+Open `slides\index.html` in a browser, without a server or internet connection.
 Use the buttons or Left/Right, Page Up/Down, Home/End, and Space keys. The
 **Open SVG** link opens the current slide with its selectable text and links.
 When adding slides, also update the preview's `titles` array and README previews.

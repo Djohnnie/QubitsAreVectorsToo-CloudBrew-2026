@@ -5,7 +5,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$slides = Join-Path $root '_slides'
+$slides = Join-Path $root 'slides'
 $resources = Join-Path $root '_resources'
 
 function DataUri([string]$path, [string]$mime) {

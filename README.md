@@ -16,7 +16,7 @@ those ideas to column vectors, the Bloch sphere, and tensor products.
 multiplications, and geometric rotations. **Quantum Code** brings the same
 states and operations to life in six Q# examples.
 
-Open the [offline slide preview](_slides/index.html) to navigate the deck with
+Open the [offline slide preview](slides/index.html) to navigate the deck with
 the arrow keys, or browse the individual slides below. Each slide has its own
 TL;DR box and a detailed explanation of its content and place in the story.
 The runnable Q# examples linked below for slides 55–60 are hosted in the
@@ -32,7 +32,7 @@ snippets in `_resources/code`.
 > **TL;DR:** Quantum computing becomes more approachable when qubits are vectors
 > and gates are transformations.
 
-![Qubits Are Vectors Too](_slides/slide-01.svg)
+![Qubits Are Vectors Too](slides/slide-01.svg)
 
 The opening slide introduces the session, its subtitle **The Math Behind
 Quantum Computing**, and presenter Johnny Hooyberghs at
@@ -52,7 +52,7 @@ an opaque collection of physical effects.
 > **TL;DR:** The speaker approaches quantum computing from a software
 > developer's perspective.
 
-![Johnny Hooyberghs](_slides/slide-02.svg)
+![Johnny Hooyberghs](slides/slide-02.svg)
 
 A speaker portrait accompanies an introduction covering .NET custom application
 development, Azure Cloud, and GenAI. The slide lists 18 years of professional
@@ -75,7 +75,7 @@ technical reasoning skills while learning the mathematical model.
 > **TL;DR:** The QR code leads to the original slides, explanations, and
 > shared Q# examples.
 
-![Scan to visit the repository](_slides/slide-03.svg)
+![Scan to visit the repository](slides/slide-03.svg)
 
 A large, centered QR code gives the audience a direct route to the
 [original presentation repository](https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026).
@@ -93,7 +93,7 @@ only message before the talk moves into its roadmap.
 > **TL;DR:** The journey runs from quantum motivation to mathematics, vectors,
 > gates, and working Q# code.
 
-![Agenda](_slides/slide-04.svg)
+![Agenda](slides/slide-04.svg)
 
 Five numbered chapters organize the talk: **Introduction**, **Quantum Math**,
 **Vectors**, **Quantum Logic**, and **Quantum Code**. Each chapter is paired
@@ -110,7 +110,7 @@ independent topics.
 
 > **TL;DR:** Chapter 1 asks what quantum computing is and why we might need it.
 
-![Introduction](_slides/slide-05.svg)
+![Introduction](slides/slide-05.svg)
 
 The first chapter divider introduces the question **What is quantum computing
 and why do we need it?** A large chapter number and sparse layout mark the
@@ -126,7 +126,7 @@ that follows.
 > **TL;DR:** Repeated doubling can turn a tiny starting quantity into an
 > enormous one surprisingly quickly.
 
-![Paper folding to the Moon: question](_slides/slide-06.svg)
+![Paper folding to the Moon: question](slides/slide-06.svg)
 
 The slide asks how many theoretical folds would make a sheet of A4 paper
 thick enough to reach the Moon. The assumptions are explicit: the paper starts
@@ -144,7 +144,7 @@ intuition for exponential growth before the state-space discussion.
 > **TL;DR:** Just 42 theoretical doublings take 0.1 mm beyond the average
 > Earth–Moon distance.
 
-![Paper folding to the Moon: answer](_slides/slide-07.svg)
+![Paper folding to the Moon: answer](slides/slide-07.svg)
 
 The same composition now reveals the answer **42**: 42 folds, shown without
 an exclamation mark so it cannot be misread as a factorial. The completed
@@ -162,7 +162,7 @@ the number of amplitudes in a general pure-state description.
 > **TL;DR:** Molecular systems motivate computing methods that can represent
 > quantum behavior directly.
 
-![Molecular chemistry and DNA](_slides/slide-08.svg)
+![Molecular chemistry and DNA](slides/slide-08.svg)
 
 Molecular structures, chemical bonds, a DNA double helix, and a laboratory
 flask introduce chemistry as a real-world problem domain. The illustration
@@ -180,7 +180,7 @@ problem is immediately solvable on current hardware.
 > **TL;DR:** Logistics illustrates how many interacting choices can create
 > a difficult optimization problem.
 
-![Global logistics and supply chains](_slides/slide-09.svg)
+![Global logistics and supply chains](slides/slide-09.svg)
 
 An aircraft, globe, delivery routes, cargo truck, shipping crates, and a
 checklist depict a network of connected decisions. Routing, scheduling,
@@ -198,7 +198,7 @@ or performance result is claimed here.
 > **TL;DR:** Quantum computing changes some of the computational assumptions
 > on which security depends.
 
-![Cryptography and security](_slides/slide-10.svg)
+![Cryptography and security](slides/slide-10.svg)
 
 A central padlock, keys, binary digits, and circuit traces introduce security
 as the third application domain. Unlike the chemistry and logistics images,
@@ -216,7 +216,7 @@ The slide is a thematic introduction, not a cryptographic attack walkthrough.
 > **TL;DR:** Spin provides a physical example of two basis states and
 > their superposition.
 
-![Electron spin](_slides/slide-11.svg)
+![Electron spin](slides/slide-11.svg)
 
 Arrows and electron symbols illustrate spin-up and spin-down states alongside
 a schematic superposition, each labeled beneath the symbol. Plus and
@@ -236,7 +236,7 @@ axis yields one of the allowed outcomes.
 > **TL;DR:** The cat thought experiment highlights the tension between
 > quantum superposition and definite observed outcomes.
 
-![Schrödinger's cat](_slides/slide-12.svg)
+![Schrödinger's cat](slides/slide-12.svg)
 
 Side-by-side illustrations show the alive and dead outcomes, each with a box
 and experimental apparatus. The familiar thought experiment connects a
@@ -254,7 +254,7 @@ measurement probabilities without requiring a choice of interpretation.
 > **TL;DR:** Entangled particles must be described jointly because their
 > measurement outcomes are correlated.
 
-![Entangled electrons](_slides/slide-13.svg)
+![Entangled electrons](slides/slide-13.svg)
 
 Two electrons with matching spin outcomes are joined by an infinity-shaped
 link. The link is a visual shorthand for their correlations, not a physical
@@ -271,7 +271,7 @@ Entanglement does not provide controllable faster-than-light communication.
 > **TL;DR:** Quantum mechanics challenges everyday intuition; a precise
 > mathematical model is more useful than forced classical analogies.
 
-![A Feynman quote](_slides/slide-14.svg)
+![A Feynman quote](slides/slide-14.svg)
 
 Large yellow quotation marks frame Richard Feynman's documented
 remark "I think I can safely say that nobody understands quantum mechanics",
@@ -291,7 +291,7 @@ on 11 May 1918, his 1965 Nobel Prize in Physics, and his death on
 > **TL;DR:** A quantum computer includes substantial supporting hardware,
 > not just the qubits themselves.
 
-![A quantum computer](_slides/slide-15.svg)
+![A quantum computer](slides/slide-15.svg)
 
 A full-slide photograph shows a suspended cryogenic assembly, with the
 section label, slide title, and branding overlaid on dark fades. Slides 15–19
@@ -309,7 +309,7 @@ multiple hardware approaches with different requirements.
 > **TL;DR:** Early classical hardware is a reminder that computing platforms
 > evolve dramatically over time.
 
-![Vacuum tube computing](_slides/slide-16.svg)
+![Vacuum tube computing](slides/slide-16.svg)
 
 A historical computing module fills the slide with vacuum tubes, resistors,
 and wiring. The visible components contrast with today's compact classical
@@ -327,7 +327,7 @@ physical implementation.
 > **TL;DR:** Physical qubits need carefully engineered devices, connections,
 > and operating conditions.
 
-![Superconducting qubits](_slides/slide-17.svg)
+![Superconducting qubits](slides/slide-17.svg)
 
 The source photograph associated with superconducting qubits shows a close-up
 of cryogenic hardware and its connections. Rather than supplying a microscopic
@@ -345,7 +345,7 @@ state with the same amplitude and vector language.
 > **TL;DR:** Neutral atoms offer another physical platform for representing
 > and controlling qubits.
 
-![Neutral atom qubits](_slides/slide-18.svg)
+![Neutral atom qubits](slides/slide-18.svg)
 
 The photograph shows the Pasqal ORION neutral-atom quantum computing
 apparatus. The named system gives the hardware survey a concrete example
@@ -363,7 +363,7 @@ single physical technology.
 > **TL;DR:** Topological approaches investigate different ways to encode and
 > protect quantum information.
 
-![Topological qubits and Majorana quasiparticles](_slides/slide-19.svg)
+![Topological qubits and Majorana quasiparticles](slides/slide-19.svg)
 
 Microsoft Majorana hardware illustrates the final topic in the hardware
 survey. The photograph and title introduce topological qubits and Majorana
@@ -380,7 +380,7 @@ before the talk turns to the shared mathematical representation of qubits.
 > **TL;DR:** Chapter 2 replaces loose analogies with amplitudes and the rules
 > they must satisfy.
 
-![Quantum Math](_slides/slide-20.svg)
+![Quantum Math](slides/slide-20.svg)
 
 The second chapter divider asks **Is math important in quantum?** Its large
 chapter number signals a change from motivation and physical examples to
@@ -395,7 +395,7 @@ about what information a quantum-state description must contain.
 
 > **TL;DR:** A classical bit has one of two values: 0 or 1.
 
-![Classical bits](_slides/slide-21.svg)
+![Classical bits](slides/slide-21.svg)
 
 Large numerals 0 and 1 appear side by side with no additional mathematical
 machinery. This establishes the familiar reference point from classical
@@ -411,7 +411,7 @@ build easier to follow.
 
 > **TL;DR:** |0⟩ and |1⟩ name the computational-basis states of a qubit.
 
-![Quantum bits or qubits](_slides/slide-22.svg)
+![Quantum bits or qubits](slides/slide-22.svg)
 
 The classical numerals are replaced by the kets |0⟩ and |1⟩. The surrounding
 symbols are meaningful: a ket names a state vector, rather than merely
@@ -428,7 +428,7 @@ list of pure states a qubit can occupy.
 > **TL;DR:** A general pure qubit state combines the basis states as
 > α|0⟩ + β|1⟩.
 
-![Qubits in superposition](_slides/slide-23.svg)
+![Qubits in superposition](slides/slide-23.svg)
 
 A large expression α|0⟩ + β|1⟩ introduces superposition, with the amplitudes
 highlighted in the deck's yellow-to-pale-yellow gradient. The basis states remain
@@ -444,7 +444,7 @@ between 0 and 1.
 
 > **TL;DR:** The squared magnitudes of a qubit's amplitudes must sum to one.
 
-![Normalized qubit amplitudes](_slides/slide-24.svg)
+![Normalized qubit amplitudes](slides/slide-24.svg)
 
 The superposition expression gains the condition |α|² + |β|² = 1.
 Computational-basis measurement returns 0 with probability |α|² and
@@ -462,7 +462,7 @@ chapter before column notation appears.
 > **TL;DR:** Amplitudes can be complex numbers, and phase carries information
 > that probabilities alone do not show.
 
-![Complex qubit amplitudes](_slides/slide-25.svg)
+![Complex qubit amplitudes](slides/slide-25.svg)
 
 The final step of the build writes α = a + bi and β = c + di, where
 a, b, c, and d are real and i² = −1. Together with normalization, this
@@ -480,7 +480,7 @@ state's observable predictions.
 > **TL;DR:** A general two-qubit pure state needs one amplitude for each
 > of four joint basis states.
 
-![Two qubits: four amplitudes](_slides/slide-26.svg)
+![Two qubits: four amplitudes](slides/slide-26.svg)
 
 The state expands to α|00⟩ + β|01⟩ + γ|10⟩ + δ|11⟩.
 The binary-ordered kets describe joint outcomes for the two qubits, and
@@ -497,7 +497,7 @@ products and the Bell-state example.
 
 > **TL;DR:** A general n-qubit pure-state vector has 2ⁿ amplitude entries.
 
-![More qubits, exponentially more amplitudes](_slides/slide-27.svg)
+![More qubits, exponentially more amplitudes](slides/slide-27.svg)
 
 Explicit expansions for two, three, and four qubits show four, eight,
 and sixteen amplitudes respectively. The coefficients are written as an
@@ -516,7 +516,7 @@ computers automatically solve every exponential problem efficiently.
 > **TL;DR:** Chapter 3 makes the amplitude model concrete with vectors
 > and geometry.
 
-![Vectors](_slides/slide-28.svg)
+![Vectors](slides/slide-28.svg)
 
 The chapter divider asks **What about vectors and linear algebra?**
 It marks the transition from ket expansions to alternative representations
@@ -533,7 +533,7 @@ in the next chapter.
 > **TL;DR:** The Bloch sphere represents a single pure qubit state as
 > a direction in three-dimensional space.
 
-![The Bloch sphere](_slides/slide-29.svg)
+![The Bloch sphere](slides/slide-29.svg)
 
 Two wireframe Bloch spheres appear side by side. One establishes the
 coordinate system with z pointing up, x to the right, and y toward the
@@ -553,7 +553,7 @@ plot of two complex amplitude entries or of an electron's trajectory.
 > **TL;DR:** |0⟩ is the column vector [1, 0]ᵀ and sits at the Bloch
 > sphere's north pole.
 
-![Ket zero](_slides/slide-30.svg)
+![Ket zero](slides/slide-30.svg)
 
 The first worked state sets α = 1 and β = 0, so the expansion is
 1|0⟩ + 0|1⟩. The normalization calculation resolves to 1 + 0 = 1,
@@ -570,7 +570,7 @@ measurement therefore returns 0 with certainty.
 > **TL;DR:** |1⟩ is the column vector [0, 1]ᵀ and sits at the Bloch
 > sphere's south pole.
 
-![Ket one](_slides/slide-31.svg)
+![Ket one](slides/slide-31.svg)
 
 The matching example sets α = 0 and β = 1. Its expansion is
 0|0⟩ + 1|1⟩, normalization becomes 0 + 1 = 1, and its column
@@ -587,7 +587,7 @@ the X and Y gates will exchange.
 > **TL;DR:** Equal positive amplitudes of 1/√2 give equal probabilities
 > of 1/2, not amplitudes of 1/2.
 
-![A perfect 50/50 superposition](_slides/slide-32.svg)
+![A perfect 50/50 superposition](slides/slide-32.svg)
 
 The state |+⟩ = (|0⟩ + |1⟩)/√2 has α = β = 1/√2.
 Its column vector contains those two entries, and the normalization
@@ -605,7 +605,7 @@ by the Z gate.
 > **TL;DR:** For real, nonnegative amplitudes, α = cos(θ/2) and
 > β = sin(θ/2).
 
-![From amplitudes to Bloch angles](_slides/slide-33.svg)
+![From amplitudes to Bloch angles](slides/slide-33.svg)
 
 Three wireframe spheres revisit |0⟩, |1⟩, and |+⟩, each with
 a state arrow, angle label, and worked calculation. Inverting
@@ -625,7 +625,7 @@ describes relative phase around the sphere.
 > **TL;DR:** Two-qubit columns have four rows, ordered as |00⟩,
 > |01⟩, |10⟩, and |11⟩.
 
-![Two qubits and the joint state](_slides/slide-34.svg)
+![Two qubits and the joint state](slides/slide-34.svg)
 
 Four column matrices display the computational-basis states,
 each with one 1 and three zeros in the fixed basis order.
@@ -644,7 +644,7 @@ This equal superposition is a product state, not an entangled one.
 > **TL;DR:** The tensor product combines two independent qubit columns
 > into one joint-state column.
 
-![Tensor product of two state columns](_slides/slide-35.svg)
+![Tensor product of two state columns](slides/slide-35.svg)
 
 The centered calculation takes the columns [α, β]ᵀ and [γ, δ]ᵀ
 and combines them with ⊗. In the established basis order,
@@ -663,7 +663,7 @@ two separate single-qubit columns in this way.
 > **TL;DR:** Chapter 4 describes quantum gates as consistent transformations
 > of state vectors.
 
-![Quantum Logic](_slides/slide-36.svg)
+![Quantum Logic](slides/slide-36.svg)
 
 The divider asks **How is quantum probability logical?**
 The answer developed in the chapter is that quantum states
@@ -683,7 +683,7 @@ not another reversible gate in this sequence.
 > **TL;DR:** Hadamard maps the computational basis to equal superpositions:
 > |0⟩ → |+⟩ and |1⟩ → |−⟩.
 
-![H gate: circuit and matrix](_slides/slide-37.svg)
+![H gate: circuit and matrix](slides/slide-37.svg)
 
 A single circuit wire carries |0⟩ through an H box to |+⟩.
 Below it, the Hadamard matrix has rows (1/√2, 1/√2)
@@ -701,7 +701,7 @@ needed to reverse the transformation.
 > **TL;DR:** Applying H twice returns the original state because
 > H² = I.
 
-![H gate: matrix multiplication](_slides/slide-38.svg)
+![H gate: matrix multiplication](slides/slide-38.svg)
 
 Two worked multiplications show |0⟩ → |+⟩ → |0⟩.
 First, the Hadamard matrix multiplies [1, 0]ᵀ to produce
@@ -722,7 +722,7 @@ is unitary: it keeps the vector normalized and can always be undone.
 > **TL;DR:** H is a 180° Bloch rotation about the diagonal
 > axis (x + z)/√2.
 
-![H gate: Bloch-sphere rotation](_slides/slide-39.svg)
+![H gate: Bloch-sphere rotation](slides/slide-39.svg)
 
 A white input vector at +z rotates to a yellow output at +x,
 visualizing |0⟩ → |+⟩. The yellow trajectory shows
@@ -741,7 +741,7 @@ the state has become mixed.
 
 > **TL;DR:** X is the quantum bit flip: it swaps |0⟩ and |1⟩.
 
-![X gate: circuit and matrix](_slides/slide-40.svg)
+![X gate: circuit and matrix](slides/slide-40.svg)
 
 The circuit passes |0⟩ through an X box and labels the
 output |1⟩. The matrix has rows (0, 1) and (1, 0),
@@ -759,7 +759,7 @@ changing a classical result.
 > **TL;DR:** X exchanges the two entries of the state column,
 > and a second X exchanges them back.
 
-![X gate: matrix multiplication](_slides/slide-41.svg)
+![X gate: matrix multiplication](slides/slide-41.svg)
 
 The two calculations multiply the X matrix first by
 [1, 0]ᵀ and then by [0, 1]ᵀ, showing
@@ -777,7 +777,7 @@ are swapped without losing their phase information.
 
 > **TL;DR:** X makes a 180° turn about the Bloch sphere's x axis.
 
-![X gate: Bloch-sphere rotation](_slides/slide-42.svg)
+![X gate: Bloch-sphere rotation](slides/slide-42.svg)
 
 The input arrow points to the north pole and the output
 to the south pole, matching |0⟩ → |1⟩.
@@ -796,7 +796,7 @@ path into the plane of the slide.
 > **TL;DR:** Y flips the basis states with factors of i
 > that must be retained in the amplitude calculation.
 
-![Y gate: circuit and matrix](_slides/slide-43.svg)
+![Y gate: circuit and matrix](slides/slide-43.svg)
 
 The circuit labels |0⟩ → |1⟩ up to global phase.
 The matrix, with rows (0, −i) and (i, 0), supplies
@@ -815,7 +815,7 @@ circuit labels from the full complex-valued transformation.
 > **TL;DR:** Keeping the imaginary factors shows exactly
 > why Y² = I.
 
-![Y gate: matrix multiplication](_slides/slide-44.svg)
+![Y gate: matrix multiplication](slides/slide-44.svg)
 
 The worked sequence is |0⟩ → i|1⟩ → |0⟩.
 The first multiplication gives [0, i]ᵀ rather than
@@ -835,7 +835,7 @@ subsequent gate calculations.
 > **TL;DR:** Y is a 180° turn about y; the Bloch sphere
 > does not display the output's global factor i.
 
-![Y gate: Bloch-sphere rotation](_slides/slide-45.svg)
+![Y gate: Bloch-sphere rotation](slides/slide-45.svg)
 
 The north-pole input moves to the south pole along
 a half-turn about the y axis. The output is labeled
@@ -855,7 +855,7 @@ the exact amplitude calculation.
 > **TL;DR:** Z changes the sign of the |1⟩ component,
 > turning |+⟩ into |−⟩.
 
-![Z gate: circuit and matrix](_slides/slide-46.svg)
+![Z gate: circuit and matrix](slides/slide-46.svg)
 
 The circuit deliberately starts with |+⟩ so that
 the phase flip is visible in the output label |−⟩.
@@ -874,7 +874,7 @@ the components, as H does.
 > **TL;DR:** Z flips the second amplitude's sign,
 > and applying it twice restores the original column.
 
-![Z gate: matrix multiplication](_slides/slide-47.svg)
+![Z gate: matrix multiplication](slides/slide-47.svg)
 
 The two explicit multiplications show
 |+⟩ → |−⟩ → |+⟩. The input column
@@ -894,7 +894,7 @@ the states under other measurements or gates.
 > **TL;DR:** Z makes a 180° turn about z, leaving
 > the poles fixed and exchanging |+⟩ with |−⟩.
 
-![Z gate: Bloch-sphere rotation](_slides/slide-48.svg)
+![Z gate: Bloch-sphere rotation](slides/slide-48.svg)
 
 The white +x input vector rotates to a yellow
 −x output, illustrating |+⟩ → |−⟩.
@@ -914,7 +914,7 @@ alone the sign is only a global phase.
 > **TL;DR:** CNOT flips the second qubit only when
 > the first qubit is 1.
 
-![CNOT gate: circuit and matrix](_slides/slide-49.svg)
+![CNOT gate: circuit and matrix](slides/slide-49.svg)
 
 A two-wire circuit uses the first qubit as the
 control and the second as the target. The concrete
@@ -935,7 +935,7 @@ acts coherently on superpositions.
 > **TL;DR:** CNOT exchanges the |10⟩ and |11⟩
 > amplitude entries, and CNOT² = I.
 
-![CNOT gate: matrix multiplication](_slides/slide-50.svg)
+![CNOT gate: matrix multiplication](slides/slide-50.svg)
 
 The worked columns show
 |10⟩ = [0, 0, 1, 0]ᵀ mapping to
@@ -957,7 +957,7 @@ contains several nonzero amplitudes.
 > **TL;DR:** H on the control, then CNOT, turns |00⟩ into
 > the Bell state (|00⟩ + |11⟩)/√2.
 
-![CNOT gate: entangling two qubits](_slides/slide-51.svg)
+![CNOT gate: entangling two qubits](slides/slide-51.svg)
 
 The circuit uses the same two-wire style as slide 49:
 both qubits start in |0⟩, a Hadamard box sits on the
@@ -979,7 +979,7 @@ two slides carry out this same sequence with explicit columns.
 > **TL;DR:** H|0⟩ = |+⟩, and |+⟩ ⊗ |0⟩ is the joint column
 > (1/√2, 0, 1/√2, 0)ᵀ.
 
-![Bell state, part 1: H and tensor product](_slides/slide-52.svg)
+![Bell state, part 1: H and tensor product](slides/slide-52.svg)
 
 Step 1 is a single-qubit calculation from slide 38:
 the Hadamard matrix multiplies the column (1, 0)ᵀ and
@@ -999,7 +999,7 @@ together, so nothing is entangled yet.
 > **TL;DR:** CNOT swaps the last two rows, producing
 > (1/√2, 0, 0, 1/√2)ᵀ = (|00⟩ + |11⟩)/√2, which is not a product state.
 
-![Bell state, part 2: CNOT entangles](_slides/slide-53.svg)
+![Bell state, part 2: CNOT entangles](slides/slide-53.svg)
 
 Step 3 applies the 4×4 CNOT matrix from slide 49 to the joint
 column. Rows one and two are unchanged, while rows three and four
@@ -1020,7 +1020,7 @@ these two amplitudes of 0.7071.
 > **TL;DR:** Chapter 5 translates the same states
 > and gates into small Q# programs.
 
-![Quantum Code](_slides/slide-54.svg)
+![Quantum Code](slides/slide-54.svg)
 
 The final chapter divider asks **How is Q#
 related to all of this?** The discussion now
@@ -1040,7 +1040,7 @@ finding and classical post-processing recover factors.
 > **TL;DR:** Allocating a Q# qubit initializes it
 > to |0⟩; simulator diagnostics can inspect that state.
 
-![Your first qubit in Q#](_slides/slide-55.svg)
+![Your first qubit in Q#](slides/slide-55.svg)
 
 The source in
 [`example-1\src\Main.qs`](https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026/blob/main/example-1/src/Main.qs)
@@ -1065,7 +1065,7 @@ positive-real amplitudes.
 > **TL;DR:** `X(q);` changes the new qubit
 > from |0⟩ to |1⟩ before diagnostics run.
 
-![Flip a qubit with the X gate](_slides/slide-56.svg)
+![Flip a qubit with the X gate](slides/slide-56.svg)
 
 The source in
 [`example-2\src\Main.qs`](https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026/blob/main/example-2/src/Main.qs)
@@ -1087,7 +1087,7 @@ point in the program the table represents.
 > **TL;DR:** `H(q);` prepares |+⟩ with
 > two amplitudes of 1/√2 and two 50% probabilities.
 
-![Create a superposition with H](_slides/slide-57.svg)
+![Create a superposition with H](slides/slide-57.svg)
 
 The source in
 [`example-3\src\Main.qs`](https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026/blob/main/example-3/src/Main.qs)
@@ -1112,7 +1112,7 @@ returns the qubit to zero for release.
 > amplitudes 1/2 and √3/2, giving probabilities
 > of 25% and 75%.
 
-![A 25% / 75% superposition with Ry](_slides/slide-58.svg)
+![A 25% / 75% superposition with Ry](slides/slide-58.svg)
 
 The source in
 [`example-4\src\Main.qs`](https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026/blob/main/example-4/src/Main.qs)
@@ -1137,7 +1137,7 @@ input and angle; diagnostics again precede reset.
 > **TL;DR:** H on the first qubit followed
 > by CNOT prepares (|00⟩ + |11⟩)/√2.
 
-![Entangle two qubits with H and CNOT](_slides/slide-59.svg)
+![Entangle two qubits with H and CNOT](slides/slide-59.svg)
 
 The source in
 [`example-5\src\Main.qs`](https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026/blob/main/example-5/src/Main.qs)
@@ -1164,7 +1164,7 @@ the displayed table is not a measurement log.
 > classical continued fractions and GCDs can
 > factor a small semiprime.
 
-![Example 6: Shor's algorithm in Q#](_slides/slide-60.svg)
+![Example 6: Shor's algorithm in Q#](slides/slide-60.svg)
 
 The source in
 [`example-6\src\shor.qs`](https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026/blob/main/example-6/src/shor.qs)
@@ -1190,7 +1190,7 @@ factoring demonstration.
 > unitary transformations, and measurements produce
 > outcomes governed by the state's amplitudes.
 
-![Thank you and questions](_slides/slide-61.svg)
+![Thank you and questions](slides/slide-61.svg)
 
 The closing slide invites questions, repeats
 the repository QR code, and places a colorful
