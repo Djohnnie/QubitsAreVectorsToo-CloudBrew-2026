@@ -23,7 +23,7 @@
   <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
     <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#304580" stroke-width="1" opacity=".25"/>
   </pattern>
-  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
     <path d="M 0 0 L 10 5 L 0 10 Z" fill="#e7d450"/>
   </marker>
 </defs>
@@ -37,9 +37,9 @@
 <text x='420' y='410' text-anchor='middle' dominant-baseline='central' class='math' font-size='80'>|&#x2009;0&#x2009;&#x27E9;</text>
 <text x="540" y="410" text-anchor="middle" dominant-baseline="central" class="math" font-size="64">=</text>
 <g transform="translate(600 320)">
-  <path d="M20 0H0V180H20 M160 0H180V180H160" fill="none" stroke="#ffffff" stroke-width="4"/>
-  <text x="90" y="65" text-anchor="middle" class="math" font-size="64">1</text>
-  <text x="90" y="155" text-anchor="middle" class="math" font-size="64">0</text>
+  <path d="M20 0H0V180H20 M110 0H130V180H110" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <text x="65" y="65" text-anchor="middle" class="math" font-size="64">1</text>
+  <text x="65" y="155" text-anchor="middle" class="math" font-size="64">0</text>
 </g>
 <text x='570' y='620' text-anchor='middle' class='math state-expansion' font-size='58'>1&#x2009;|&#x2009;0&#x2009;&#x27E9;&#x2002;+&#x2002;0&#x2009;|&#x2009;1&#x2009;&#x27E9;&#x2002;=&#x2002;|&#x2009;0&#x2009;&#x27E9;</text>
 <text x='570' y='755' text-anchor='middle' class='math state-normalization' font-size='54'>|&#x2009;1&#x2009;|&#xB2;&#x2002;+&#x2002;|&#x2009;0&#x2009;|&#xB2;&#x2002;=&#x2002;1</text>

@@ -20,16 +20,17 @@ To regenerate only selected numbered slides without touching the others:
 ```
 
 Edit the content and layouts in `build-slides.ps1` and rerun it. It regenerates
-`slide-01.svg` through `slide-61.svg` and `slide-template.svg`, including embedded
+`slide-01.svg` through `slide-62.svg` and `slide-template.svg`, including embedded
 fonts, the conference and Zure logos, speaker photo, and QR code from `_resources`.
 **Regeneration overwrites those SVG files.**
-Alternatively, edit or duplicate the SVGs directly and do not regenerate them.
+Make lasting slide changes in the generator or its source assets, not in the
+numbered SVGs.
 
 The slides have a 3840 x 2160 canvas and a 1920 x 1080 coordinate system. Keep
 important content within the 100-unit horizontal margins and above the footer
 at y=985. Use Montserrat 700 for headings, Open Sans for body text, and at least
-28 units for normal body copy. XML-escape text; use XML entities for mathematical
-symbols when editing the generator.
+28 units for normal body copy. Pass literal mathematical symbols to the
+generator's `Text` and `Lines` helpers; they handle XML escaping.
 
 The theme follows [CloudBrew](https://www.cloudbrew.be/): navy `#050f4a`,
 blue `#091b68`, yellow `#e7d450`, pale yellow `#f6f0c0`, and white.
@@ -37,15 +38,17 @@ The wordmark, icon, and subtle cloud background are local copies of the site's
 `img/logo.png`, `img/logo.svg`, and `img/cloud.png`. Fonts are embedded for offline
 viewing; Montserrat is distributed under the accompanying SIL Open Font License.
 Diagrams use yellow highlights and light-blue secondary strokes for contrast.
-Photos, formulas, repository links, and QR codes retain their original content.
+The QR on slides 3 and 62 embeds `_resources\qrcode.svg`. Its pixels must
+encode the same direct CloudBrew repository URL as the generator's `$repoUrl`.
 
-The Q# text shown on slides 55–59 is stored in `_resources\code`. These are
-presentation snippets, copied from the original slides, not runnable projects.
-The build does not require the original deck's external `example-*` directories.
+The Q# text shown on slides 56–60 is stored in `_resources\code`. These are
+display copies; the six runnable Q# projects are in [`examples`](../examples/).
+Slide 61 uses 143 as a worked input for example 6, not its default input.
 
-Slides 2–58 include a small linked repository caption in the footer; slide
+Slides 2–62 include a small linked repository caption in the footer; slide
 numbers remain aligned at the far right. The title slide has no footer.
-All slides and the template include the Zure logo in white at x=1526, y=880,
+Except for the inset photo captions on slides 17–19, the slides and
+template include the Zure logo in white at x=1526, y=880,
 with a 294 x 75 size, above the footer area.
 
 ## Export PowerPoint

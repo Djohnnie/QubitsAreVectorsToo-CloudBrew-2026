@@ -46,7 +46,7 @@ $defs = @"
   <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
     <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#304580" stroke-width="1" opacity=".25"/>
   </pattern>
-  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
     <path d="M 0 0 L 10 5 L 0 10 Z" fill="#e7d450"/>
   </marker>
 </defs>
@@ -106,6 +106,20 @@ function ColumnVector4([int]$x, [int]$y, [string[]]$entries, [int]$width = 180, 
     ) -join "`n"
 }
 
+function ColumnVector8([int]$x, [int]$y, [string[]]$entries, [int]$width = 180, [int]$size = 38, [int]$rowGap = 58) {
+    $rightInset = $width - 20
+    $center = $width / 2
+    $height = 8 * $rowGap + 10
+    @(
+        "<g transform='translate($x $y)'>"
+        "<path d='M20 0H0V${height}H20 M$rightInset 0H${width}V${height}H$rightInset' fill='none' stroke='#ffffff' stroke-width='4'/>"
+        for ($i = 0; $i -lt 8; $i++) {
+            "<text x='$center' y='$($i * $rowGap + 44)' text-anchor='middle' class='math' font-size='$size'>$($entries[$i])</text>"
+        }
+        '</g>'
+    ) -join "`n"
+}
+
 function Matrix2([int]$x, [int]$y, [string[]]$entries) {
     @"
 <g transform="translate($x $y)">
@@ -159,7 +173,7 @@ function Orbit([int]$x = 1450, [int]$y = 560) {
 "@
 }
 
-function SaveSlide([string]$name, [string]$title, [string]$description, [string]$body, [string]$number, [string]$section = 'THE MATH BEHIND QUANTUM COMPUTING', [switch]$titleSlide, [string]$background = '') {
+function SaveSlide([string]$name, [string]$title, [string]$description, [string]$body, [string]$number, [string]$section = 'THE MATH BEHIND QUANTUM COMPUTING', [switch]$titleSlide, [string]$background = '', [switch]$hideZureLogo) {
     if ($OnlySlides.Count -gt 0) {
         if ($name -notmatch '^slide-(\d+)\.svg$' -or [int]$Matches[1] -notin $OnlySlides) {
             return
@@ -169,13 +183,12 @@ function SaveSlide([string]$name, [string]$title, [string]$description, [string]
     $safeDescription = [Security.SecurityElement]::Escape($description)
     if ($titleSlide) {
         $slideHeader = @(
-            "<image x='1305' y='285' width='290' height='290' href='$cloudbrewIcon'/>"
-            "<image x='1150' y='605' width='600' height='155' href='$logo'/>"
+            "<image x='1150' y='463' width='600' height='155' href='$logo'/>"
         ) -join "`n"
         $slideFooter = ''
     } else {
         $slideHeader = @(
-            (Text 100 100 $section 20 'label')
+            if ($section) { Text 100 100 $section 20 'label' }
             "<image x='1500' y='55' width='320' height='83' href='$logo'/>"
         ) -join "`n"
         $slideFooter = @(
@@ -197,7 +210,7 @@ $background
 $slideHeader
 $body
 $slideFooter
-<image x='1526' y='880' width='294' height='75' href='$zureLogo'/>
+$(if (!$hideZureLogo) { "<image x='1526' y='880' width='294' height='75' href='$zureLogo'/>" })
 </svg>
 "@
     [IO.File]::WriteAllText((Join-Path $slides $name), $svg, [Text.UTF8Encoding]::new($false))
@@ -211,7 +224,7 @@ $body = @(
     (Text 100 805 'Johnny Hooyberghs' 34 'heading')
     (Text 100 860 'CloudBrew / Mechelen / 2026' 26)
 ) -join "`n"
-SaveSlide 'slide-01.svg' 'Qubits Are Vectors Too' 'Title slide with the CloudBrew logo and cloud motif.' $body '01' 'LINEAR ALGEBRA. QUANTUM IDEAS. DEVELOPER INTUITION.' -titleSlide
+SaveSlide 'slide-01.svg' 'Qubits Are Vectors Too' 'Qubits Are Vectors Too: The Math Behind Quantum Computing. Johnny Hooyberghs introduces pure-state vectors and gates through linear algebra at CloudBrew 2026.' $body '01' 'LINEAR ALGEBRA. QUANTUM IDEAS. DEVELOPER INTUITION.' -titleSlide
 
 $body = @(
     (Text 100 245 'Johnny Hooyberghs' 72 'heading')
@@ -221,7 +234,7 @@ $body = @(
 # Uniform gap between the last line of one bullet and the next bullet.
 $speakerBullets = @(
     @('Focus on .NET custom application development,', 'Azure Cloud, and GenAI'),
-    @('18 years of professional experience as a', 'software enthusiast'),
+    @('19 years of professional experience as a', 'software enthusiast'),
     @('Interested in Quantum Computing'),
     @('Public speaker and trainer'),
     @('Microsoft MVP in Developer Technologies', 'and Microsoft Azure since 2020')
@@ -245,21 +258,21 @@ $speakerBackground = @"
 </defs>
 <image x="690" y="165" width="1080" height="790" href="$belgiumMap" filter="url(#belgium-silhouette)"/>
 "@
-SaveSlide 'slide-02.svg' 'Johnny Hooyberghs' 'Johnny Hooyberghs, Microsoft MVP and speaker, with his professional background and interests. A subtle silhouette of Belgium in the background marks his home country.' $body '02' 'ABOUT THE SPEAKER' -background $speakerBackground
+SaveSlide 'slide-02.svg' 'Johnny Hooyberghs' 'Johnny Hooyberghs is a Microsoft MVP and public speaker with 19 years of professional experience spanning .NET application development, Azure Cloud, GenAI, training, and quantum-computing interest.' $body '02' 'ABOUT THE SPEAKER' -background $speakerBackground
 
 $repoUrl = 'https://github.com/Djohnnie/QubitsAreVectorsToo-CloudBrew-2026'
 $body = @(
-    (Text 100 245 'Scan to visit the repository.' 72 'heading')
+    (Text 100 245 'Scan to visit the repository' 72 'heading')
     "<a href='$repoUrl'><image x='690' y='300' width='540' height='540' href='$qrCode'/></a>"
 ) -join "`n"
-SaveSlide 'slide-03.svg' 'Scan to visit the repository' 'Centered QR code linking to the GitHub repository for this presentation.' $body '03' 'FOLLOW ALONG'
+SaveSlide 'slide-03.svg' 'Scan to visit the repository' 'Scan or click the QR code to open this CloudBrew repository with the slides, notes and runnable Q# examples.' $body '03' 'FOLLOW ALONG'
 
 $chapters = @(
     @{ Title = 'Introduction'; Heading = @('Introduction'); Subtitle = @('What is quantum computing', 'and why do we need it?'); Slide = 5 },
     @{ Title = 'Quantum Math'; Heading = @('Quantum', 'Math'); Subtitle = @('Is math important in quantum?'); Slide = 20 },
     @{ Title = 'Vectors'; Heading = @('Vectors'); Subtitle = @('What about vectors and linear algebra?'); Slide = 28 },
-    @{ Title = 'Quantum Logic'; Heading = @('Quantum', 'Logic'); Subtitle = @('How is quantum probability logical?'); Slide = 36 },
-    @{ Title = 'Quantum Code'; Heading = @('Quantum', 'Code'); Subtitle = @('How is Q# related to all of this?'); Slide = 54 }
+    @{ Title = 'Quantum Logic'; Heading = @('Quantum', 'Logic'); Subtitle = @('How is quantum probability logical?'); Slide = 37 },
+    @{ Title = 'Quantum Code'; Heading = @('Quantum', 'Code'); Subtitle = @('How is Q# related to all of this?'); Slide = 55 }
 )
 $body = @(
     (Text 100 245 'Agenda' 72 'heading')
@@ -270,7 +283,6 @@ for ($i = 0; $i -lt $chapters.Count; $i++) {
     $body += "<text x='110' y='$($y + 40)' class='label' style='font-size:60px'>$($i + 1)</text>"
     $body += (Text 230 ($y + 40) $chapters[$i].Title 42 'heading')
     $body += (Text 650 ($y + 40) ($chapters[$i].Subtitle -join ' ') 28)
-    $body += "<path d='M230 $($y + 85)H1810' stroke='#304580'/>"
 }
 SaveSlide 'slide-04.svg' 'Agenda' 'Five chapters: Introduction, Quantum Math, Vectors, Quantum Logic, and Quantum Code.' $body '04' 'THE ROADMAP'
 
@@ -279,12 +291,11 @@ for ($i = 0; $i -lt $chapters.Count; $i++) {
     $chapterNumber = $i + 1
     $body = @(
         '<circle cx="1500" cy="560" r="490" fill="url(#glow)"/>'
-        "<text x='1500' y='560' text-anchor='middle' dominant-baseline='central' font-family='Montserrat' font-weight='700' font-size='550' style='fill:#091b68'>$chapterNumber</text>"
-        (Text 100 395 "CHAPTER $chapterNumber" 24 'label')
+        "<text x='1500' y='560' text-anchor='middle' dominant-baseline='central' font-family='Montserrat' font-weight='700' font-size='550' style='fill:#e7d450'>$chapterNumber</text>"
         (Lines 100 535 $chapter.Heading 100 130 'heading')
         (Lines 100 835 $chapter.Subtitle 36 50)
     ) -join "`n"
-    SaveSlide ('slide-{0:00}.svg' -f $chapter.Slide) $chapter.Title ($chapter.Subtitle -join ' ') $body ('{0:00}' -f $chapter.Slide) "CHAPTER $chapterNumber / $($chapter.Title.ToUpperInvariant())"
+    SaveSlide ('slide-{0:00}.svg' -f $chapter.Slide) $chapter.Title ($chapter.Subtitle -join ' ') $body ('{0:00}' -f $chapter.Slide) -section ''
 }
 
 foreach ($reveal in @($false, $true)) {
@@ -330,7 +341,7 @@ foreach ($reveal in @($false, $true)) {
         '<text x="1545" y="655" class="math" font-size="30">&#x2248; 384,400 km</text>'
         (Text 1035 755 'EARTH' 20 'label')
         '</g>'
-        (Text 100 930 'A thought experiment, not a practical folding challenge. Illustration not to scale.' 28)
+        (Text 100 930 'A thought experiment, not a practical folding challenge. Illustration not to scale. :)' 28)
     ) -join "`n"
     if ($reveal) {
         SaveSlide 'slide-07.svg' 'Paper folding to the Moon: answer' 'The same Earth, Moon, and paper-stack illustration reveals the answer: 42 theoretical folds. Starting at 0.1 mm and doubling each time gives about 439,805 km, beyond the average Earth-Moon distance of 384,400 km. Not physically achievable with an A4 sheet; illustration not to scale.' $body '07' 'INTRODUCTION / EXPONENTIAL GROWTH'
@@ -341,49 +352,59 @@ foreach ($reveal in @($false, $true)) {
 
 $illustratedSlides = @(
     @{
-        Title = 'Molecular chemistry & DNA'; Asset = 'molecular-chemistry.svg'
+        Title = 'Drug discovery & materials'; Asset = 'molecular-chemistry.svg'
         Section = 'INTRODUCTION / REAL-WORLD PROBLEMS'
-        Description = 'Molecular chemistry and DNA, illustrated with a double helix, chemical bonds, molecular structures, and a laboratory flask.'
+        Description = 'Estimating electronic energies along a reaction pathway could help compare candidate catalysts. Quantum simulation is a research target, not a demonstrated near-term drug-discovery advantage.'
+        Note = @('Can we estimate the electronic energy of a catalyst as a reaction proceeds?',
+                 'This is a quantum simulation target, not a demonstrated drug-discovery advantage.')
     },
     @{
-        Title = 'Global logistics & supply chains'; Asset = 'global-logistics.svg'
+        Title = 'Optimization & climate logistics'; Asset = 'global-logistics.svg'
         Section = 'INTRODUCTION / REAL-WORLD PROBLEMS'
-        Description = 'Global logistics and supply chains, illustrated with an aircraft, globe, delivery routes, cargo truck, shipping crates, and a checklist.'
+        Description = 'Route deliveries to minimize estimated emissions while meeting deadlines. A hybrid method uses a quantum subroutine with a classical optimizer; a quantum-inspired method runs entirely on classical hardware.'
+        Note = @('Which routes minimize emissions while meeting every delivery deadline?',
+                 'A hybrid solver uses a quantum subroutine; a quantum-inspired solver runs entirely classically.')
     },
     @{
-        Title = 'Cryptography & security'; Asset = 'cryptography-security.svg'
+        Title = 'Post-quantum cryptography & security'; Asset = 'cryptography-security.svg'
         Section = 'INTRODUCTION / REAL-WORLD PROBLEMS'
-        Description = 'Cryptography and security, illustrated with a central padlock, two keys, binary digits, and circuit traces.'
+        Description = 'A sufficiently large fault-tolerant quantum computer could threaten RSA and elliptic-curve cryptography. Migration is a classical computing task today: NIST specifies ML-KEM for key establishment and ML-DSA and SLH-DSA for signatures.'
+        Note = @('RSA and ECC face a future quantum threat. Migrate on classical hardware now.',
+                 'Use ML-KEM for key establishment; ML-DSA or SLH-DSA for digital signatures.')
     },
     @{
         Title = 'Electron spin'; Asset = 'electron-spin.svg'
         Section = 'INTRODUCTION / QUANTUM CONCEPTS'
-        Description = 'A schematic of spin-up and spin-down basis states and their superposition, labeled spin up, spin down, and superposition. Arrows represent spin states, not literal rotation of an electron.'
-        Note = 'The arrows mark a spin state along a chosen axis; an electron is not literally spinning like a ball.'
+        Description = 'Schematic, not a normalized equation: spin up and spin down along the z axis form a basis. An equal superposition has amplitude one over the square root of two for each; measuring along z gives just one outcome.'
+        Note = @('Schematic, not a normalized equation. The arrows label spin along z, not literal rotation.',
+                 'In an equal superposition, measuring along z gives one result: up or down, each with probability 1/2.')
     },
     @{
         Title = "Schr$([char]0x00F6)dinger's cat"; Asset = 'schrodingers-cat.svg'
         Section = 'INTRODUCTION / QUANTUM CONCEPTS'
-        Description = 'The cat thought experiment, with vector illustrations of the alive and dead outcomes side by side, each with a box and experimental apparatus.'
+        Description = 'In the cat thought experiment a microscopic event determines a macroscopic outcome. Alive and dead are alternatives, not two observations of the same cat.'
+        Note = 'A microscopic event determines the fate of the cat. Opening the box reveals one outcome, not both.'
     },
     @{
         Title = 'Entangled electrons'; Asset = 'entangled-electrons.svg'
         Section = 'INTRODUCTION / QUANTUM CONCEPTS'
-        Description = 'Two electrons with matching spin measurement outcomes, joined by an infinity-shaped link representing their correlated measurement results.'
-        Note = 'Measure both and the outcomes agree, like the Bell state built in the final Q# example.'
+        Description = 'For this Bell state, measuring both qubits in the computational (Z) basis yields 00 or 11 with probability one half each. A classical mixture can give identical counts. Q# example 5 on slide 60 inspects the coherent state amplitudes.'
+        Note = @('For this Bell state, measuring both qubits in the Z basis gives 00 or 11, each with probability 1/2.',
+                 'A classical mixture can match those counts. Q# example 5 (slide 60) inspects the amplitudes instead.')
     }
 )
 for ($i = 0; $i -lt $illustratedSlides.Count; $i++) {
     $illustratedSlide = $illustratedSlides[$i]
     $illustration = [IO.File]::ReadAllText((Join-Path $resources $illustratedSlide.Asset))
+    $slideNumber = 8 + $i
+    $illustrationY = if ($slideNumber -eq 11) { 300 } else { 330 }
     $body = @(
         (Text 100 245 $illustratedSlide.Title 64 'heading')
-        "<g transform='translate(100 330)'>$illustration</g>"
+        "<g transform='translate(100 $illustrationY)'>$illustration</g>"
         if ($illustratedSlide.Note) {
-            (Text 100 930 $illustratedSlide.Note 28)
+            (Lines 100 902 $illustratedSlide.Note 28 40)
         }
     ) -join "`n"
-    $slideNumber = 8 + $i
     SaveSlide ('slide-{0:00}.svg' -f $slideNumber) $illustratedSlide.Title $illustratedSlide.Description $body ('{0:00}' -f $slideNumber) $illustratedSlide.Section
 }
 
@@ -392,10 +413,9 @@ $body = @(
     '<text x="960" y="475" text-anchor="middle" class="heading" font-size="64">I think I can safely say that nobody</text>'
     '<text x="960" y="565" text-anchor="middle" class="heading" font-size="64">understands quantum mechanics.</text>'
     '<text x="1670" y="670" text-anchor="end" class="heading" style="fill:url(#accent)" font-size="220" opacity=".75">&#x201D;</text>'
-    '<circle cx="960" cy="635" r="5" fill="url(#accent)"/>'
-    '<text x="960" y="710" text-anchor="middle" font-size="38" font-style="italic">Richard Feynman</text>'
-    '<text x="960" y="755" text-anchor="middle" font-size="26">The Character of Physical Law, 1965</text>'
-    '<text x="960" y="825" text-anchor="middle" font-size="28">Born 11 May 1918, Richard Feynman won the 1965 Nobel Prize in Physics and died on 15 February 1988.</text>'
+    '<text x="960" y="685" text-anchor="middle" font-size="38" font-style="italic">Richard Feynman</text>'
+    '<text x="960" y="730" text-anchor="middle" font-size="26">The Character of Physical Law, 1965</text>'
+    '<text x="960" y="805" text-anchor="middle" font-size="28">Born 11 May 1918, Richard Feynman won the 1965 Nobel Prize in Physics and died on 15 February 1988.</text>'
 ) -join "`n"
 SaveSlide 'slide-14.svg' 'A Feynman quote' 'Richard Feynman, in The Character of Physical Law (1965): I think I can safely say that nobody understands quantum mechanics. Born 11 May 1918, Richard Feynman won the 1965 Nobel Prize in Physics and died on 15 February 1988.' $body '14' 'INTRODUCTION / QUANTUM MECHANICS'
 
@@ -410,15 +430,27 @@ $hardwareSlides = @(
     },
     @{
         Title = 'Superconducting qubits'; Asset = 'superconducting-qubits.jpg'
-        Description = 'A photograph of superconducting-qubit hardware, showing a close-up of cryogenic wiring and connections.'
+        Description = 'The photograph shows cryogenic wiring, not the processor design. On QuTech Starmon-5, microwave drives rotate individual circuit qubits, flux controls act on coupled qubits for two-qubit gates, and separate resonators read out each qubit.'
+        Caption = @('This is the refrigerator, not the chip. It keeps tiny electrical circuits cold enough to act like artificial atoms.',
+                    'Two energy levels of a circuit stand for 0 and 1. A microwave pulse changes the mix of those states.',
+                    'On the Starmon-5 chip from QuTech, neighboring circuits can interact to perform a two-qubit operation.',
+                    'To read the answer, send a signal through a separate circuit: its response tells us whether we got 0 or 1.')
     },
     @{
         Title = 'Neutral atom qubits'; Asset = 'neutral-atom-qubits.jpg'
-        Description = 'A photograph of the Pasqal ORION neutral-atom quantum computing apparatus.'
+        Description = 'The photographed Pasqal ORION cabinet houses an analog neutral-atom QPU. Optical tweezers set the atom layout; laser pulses drive Rydberg states, letting interacting atoms evolve together. Other neutral-atom platforms can implement digital gates.'
+        Caption = @('Inside the Pasqal ORION cabinet, focused beams of light hold individual atoms in place like tiny tweezers.',
+                    'A laser can lift an atom to a higher energy level. That makes it harder for a nearby atom to do the same.',
+                    'To program ORION, choose where the atoms sit and how the laser pulses. Then let the atoms interact.',
+                    'This is analog computing: the atoms evolve together, and measuring their final pattern gives a result.')
     },
     @{
         Title = 'Topological qubits & Majorana quasiparticles'; Asset = 'topological-qubits.jpg'
-        Description = 'A photograph of Microsoft Majorana hardware for the source slide on topological qubits and Majorana quasiparticles.'
+        Description = 'A Microsoft device illustrates a proposed Majorana-based encoding. Exchanging separated modes would transform the shared state. Neither the device photo nor a reported fermion-parity measurement demonstrates a protected braid.'
+        Caption = @('The idea is to store one qubit across separated parts of a device, rather than in a single spot.',
+                    'If the parts host Majorana modes, a disturbance in one place should be less likely to damage the qubit.',
+                    'Exchanging the modes in a particular order would change the shared state. This is called braiding.',
+                    'The experiment measured whether the number of electrons was even or odd. It did not show a protected braid.')
     }
 )
 for ($i = 0; $i -lt $hardwareSlides.Count; $i++) {
@@ -427,14 +459,19 @@ for ($i = 0; $i -lt $hardwareSlides.Count; $i++) {
     $photoBackground = @(
         "<image class='hardware-photo' x='0' y='0' width='1920' height='1080' preserveAspectRatio='xMidYMid meet' href='$photo'/>"
         '<defs>'
-        '<linearGradient id="photo-top-scrim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#050f4a" stop-opacity=".95"/><stop offset=".65" stop-color="#050f4a" stop-opacity=".85"/><stop offset="1" stop-color="#050f4a" stop-opacity="0"/></linearGradient>'
-        '<linearGradient id="photo-bottom-scrim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#050f4a" stop-opacity="0"/><stop offset=".35" stop-color="#050f4a" stop-opacity=".8"/><stop offset="1" stop-color="#050f4a" stop-opacity=".95"/></linearGradient>'
+        '<linearGradient id="photo-top-scrim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#050f4a" stop-opacity=".72"/><stop offset=".65" stop-color="#050f4a" stop-opacity=".52"/><stop offset="1" stop-color="#050f4a" stop-opacity="0"/></linearGradient>'
+        '<linearGradient id="photo-bottom-scrim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#050f4a" stop-opacity="0"/><stop offset=".35" stop-color="#050f4a" stop-opacity=".48"/><stop offset="1" stop-color="#050f4a" stop-opacity=".72"/></linearGradient>'
         '</defs>'
         '<rect width="1920" height="380" fill="url(#photo-top-scrim)"/>'
         '<rect y="780" width="1920" height="300" fill="url(#photo-bottom-scrim)"/>'
     ) -join "`n"
     $slideNumber = 15 + $i
-    SaveSlide ('slide-{0:00}.svg' -f $slideNumber) $hardware.Title $hardware.Description (Text 100 245 $hardware.Title 64 'heading') ('{0:00}' -f $slideNumber) "INTRODUCTION / HARDWARE" -background $photoBackground
+    $body = Text 100 245 $hardware.Title 64 'heading'
+    if ($hardware.Caption) {
+        $body += "`n" + '<rect x="100" y="762" width="1720" height="206" rx="16" fill="#20164d" fill-opacity=".78"/>'
+        $body += "`n" + (Lines 132 807 $hardware.Caption 30 43)
+    }
+    SaveSlide ('slide-{0:00}.svg' -f $slideNumber) $hardware.Title $hardware.Description $body ('{0:00}' -f $slideNumber) "INTRODUCTION / HARDWARE" -background $photoBackground -hideZureLogo:([bool]$hardware.Caption)
 }
 
 # Unicode is represented by XML entities in formula markup.
@@ -443,20 +480,20 @@ $body = @(
     '<text x="650" y="665" text-anchor="middle" class="math" font-size="250">0</text>'
     '<text x="1270" y="665" text-anchor="middle" class="math" font-size="250">1</text>'
 ) -join "`n"
-SaveSlide 'slide-21.svg' 'Classical bits' 'The two possible values of a classical bit, zero and one, displayed side by side.' $body '21' 'QUANTUM MATH / CLASSICAL BITS'
+SaveSlide 'slide-21.svg' 'Classical bits' 'A classical bit stores one definite binary value, zero or one. Unlike a qubit, it cannot describe a probability amplitude and measuring it reveals no additional relative phase.' $body '21' 'QUANTUM MATH / CLASSICAL VS. QUANTUM'
 
 $body = @(
     (Text 100 245 'Quantum bits or qubits' 72 'heading')
     (Ket 650 645 '0' 170)
     (Ket 1270 645 '1' 170)
 ) -join "`n"
-SaveSlide 'slide-22.svg' 'Quantum bits or qubits' 'The two computational-basis states of a qubit, ket zero and ket one, displayed side by side.' $body '22' 'QUANTUM MATH / QUBIT BASIS STATES'
+SaveSlide 'slide-22.svg' 'Quantum bits or qubits' 'Ket zero and ket one form the computational basis. A pure qubit state is represented by a normalized complex vector in this basis; multiplying both amplitudes by the same phase does not change the physical state.' $body '22' 'QUANTUM MATH / CLASSICAL VS. QUANTUM'
 
 $superpositionTitles = @('Qubits in superposition', 'Normalized qubit amplitudes', 'Complex qubit amplitudes')
 $superpositionDescriptions = @(
-    'A qubit in superposition is written as alpha ket zero plus beta ket one, with the amplitudes highlighted.'
-    'A qubit in superposition is alpha ket zero plus beta ket one. Its amplitudes obey the normalization condition: the squared magnitude of alpha plus the squared magnitude of beta equals one.'
-    'A normalized qubit has complex amplitudes alpha equals a plus bi and beta equals c plus di, where a, b, c, and d are real numbers and i squared equals minus one.'
+    'A pure qubit state is alpha ket zero plus beta ket one. Alpha and beta are amplitudes, not probabilities.'
+    'A pure qubit state is alpha ket zero plus beta ket one. The squared magnitudes of alpha and beta are the computational-basis probabilities and sum to one.'
+    'A pure qubit state has complex amplitudes alpha equals a plus bi and beta equals c plus di, where a, b, c, and d are real numbers and i squared equals minus one.'
 )
 for ($stage = 0; $stage -lt $superpositionTitles.Count; $stage++) {
     $body = @(
@@ -477,7 +514,7 @@ for ($stage = 0; $stage -lt $superpositionTitles.Count; $stage++) {
         }
     ) -join "`n"
     $slideNumber = 23 + $stage
-    SaveSlide ('slide-{0:00}.svg' -f $slideNumber) $superpositionTitles[$stage] $superpositionDescriptions[$stage] $body ('{0:00}' -f $slideNumber) 'QUANTUM MATH / SUPERPOSITION'
+    SaveSlide ('slide-{0:00}.svg' -f $slideNumber) $superpositionTitles[$stage] $superpositionDescriptions[$stage] $body ('{0:00}' -f $slideNumber) 'QUANTUM MATH / CLASSICAL VS. QUANTUM'
 }
 
 $jointStateTerms = @{}
@@ -505,7 +542,7 @@ $body = @(
     '<text x="960" y="450" text-anchor="middle" class="heading" style="font-size:52px">2 qubits</text>'
     "<text x='960' y='610' text-anchor='middle' class='math' font-size='104'>$($jointStateTerms[2] -join ' + ')</text>"
 ) -join "`n"
-SaveSlide 'slide-26.svg' 'Two qubits: four amplitudes' 'Two qubits have four complex amplitudes: alpha ket 00 plus beta ket 01 plus gamma ket 10 plus delta ket 11.' $body '26' 'QUANTUM MATH / THE POTENTIAL POWER OF QUANTUM'
+SaveSlide 'slide-26.svg' 'Two qubits: four amplitudes' 'A two-qubit pure state expands as alpha ket 00 plus beta ket 01 plus gamma ket 10 plus delta ket 11. The four amplitudes must have total squared magnitude one.' $body '26' 'QUANTUM MATH / CLASSICAL VS. QUANTUM'
 
 $body = @(
     (Text 100 245 'The potential power of quantum' 68 'heading')
@@ -517,7 +554,7 @@ $body = @(
     "<text x='960' y='760' text-anchor='middle' class='math' font-size='40'>$($indexedStateTerms[4][0..7] -join ' + ')</text>"
     "<text x='960' y='815' text-anchor='middle' class='math' font-size='40'>+ $($indexedStateTerms[4][8..15] -join ' + ')</text>"
 ) -join "`n"
-SaveSlide 'slide-27.svg' 'More qubits, exponentially more amplitudes' 'The full state expansions for two, three, and four qubits contain four, eight, and sixteen independent complex amplitudes alpha 0 through alpha 15 before normalization. Each expansion lists every computational-basis state once in binary order.' $body '27' 'QUANTUM MATH / THE POTENTIAL POWER OF QUANTUM'
+SaveSlide 'slide-27.svg' 'More qubits, exponentially more amplitudes' 'The full pure-state expansions for two, three, and four qubits have four, eight, and sixteen amplitude entries respectively, one per computational-basis state in binary order. These count entries, not independent physical parameters.' $body '27' 'QUANTUM MATH / CLASSICAL VS. QUANTUM'
 
 $body = (Text 100 245 'The Bloch sphere' 72 'heading')
 for ($sphere = 0; $sphere -lt 2; $sphere++) {
@@ -546,7 +583,7 @@ for ($sphere = 0; $sphere -lt 2; $sphere++) {
         '</g>'
     ) -join "`n"
 }
-SaveSlide 'slide-29.svg' 'The Bloch sphere' 'Two vector Bloch-sphere diagrams side by side, with z up, x to the right, and y toward the viewer, plus solid and dashed latitude and longitude curves. The same orientation is used on every later sphere. The right-hand sphere adds a yellow arrow indicating the pure qubit state ket phi.' $body '29' 'VECTORS / THE BLOCH SPHERE'
+SaveSlide 'slide-29.svg' 'The Bloch sphere' 'A pure qubit state corresponds to a unit vector in complex two-dimensional Hilbert space up to global phase. These states form the complex projective line CP¹, represented by the surface of the Bloch sphere. Interior points represent mixed states.' $body '29' 'VECTORS / THE COMPLEX PROJECTIVE LINE CP¹'
 
 $stateExamples = @(
     @{
@@ -572,7 +609,7 @@ $stateExamples = @(
         EndX = 230; EndY = 0
         Angle = 90; AngleX = 125; AngleY = -100
         Arc = 'M0-75 A75 75 0 0 1 75 0'
-        Description = 'Ket plus is the equal positive superposition: alpha = beta = 1/sqrt(2). Normalization gives 1/2 + 1/2 = 1. Its column has two entries of 1/sqrt(2), and its Bloch direction is positive x, not halfway between the poles.'
+        Description = 'Ket plus has equal positive amplitudes of 1/sqrt(2). Normalization gives 1/2 + 1/2 = 1. Its Bloch direction is positive x on the equator, halfway in polar angle between the poles, not at the center of the ball.'
     }
 )
 $zeroKet = '|&#x2009;0&#x2009;&#x27E9;'
@@ -585,7 +622,7 @@ for ($stateIndex = 0; $stateIndex -lt $stateExamples.Count; $stateIndex++) {
         "<text x='420' y='410' text-anchor='middle' dominant-baseline='central' class='math' font-size='80'>$ket</text>"
         '<text x="540" y="410" text-anchor="middle" dominant-baseline="central" class="math" font-size="64">=</text>'
         if ($state.Ket -eq '+') {
-            (ColumnVector 600 320 '' '' 180 54)
+            (ColumnVector 600 320 '' '' 130 54)
             "<g transform='translate(655 350) scale(.7)'>$(InvSqrt2 0 0)</g>"
             "<g transform='translate(655 440) scale(.7)'>$(InvSqrt2 0 0)</g>"
             '<g class="state-expansion" transform="translate(570 600)">'
@@ -616,7 +653,7 @@ for ($stateIndex = 0; $stateIndex -lt $stateExamples.Count; $stateIndex++) {
             '<text x="200" y="20" text-anchor="middle" class="math" font-size="58">1</text>'
             '</g>'
         } else {
-            (ColumnVector 600 320 $state.Alpha $state.Beta 180 64)
+            (ColumnVector 600 320 $state.Alpha $state.Beta 130 64)
             "<text x='570' y='620' text-anchor='middle' class='math state-expansion' font-size='58'>$($state.Alpha)&#x2009;$zeroKet&#x2002;+&#x2002;$($state.Beta)&#x2009;$oneKet&#x2002;=&#x2002;$ket</text>"
             "<text x='570' y='755' text-anchor='middle' class='math state-normalization' font-size='54'>$($state.Normalization)</text>"
             "<text x='570' y='890' text-anchor='middle' class='math state-probability-sum' font-size='54'>$($state.Sum)</text>"
@@ -642,7 +679,7 @@ for ($stateIndex = 0; $stateIndex -lt $stateExamples.Count; $stateIndex++) {
 }
 
 $body = @(
-    (Text 100 245 'From amplitudes to Bloch angles.' 66 'heading')
+    (Text 100 245 'From amplitudes to Bloch angles' 66 'heading')
     (Text 100 310 'For the normalized, real, nonnegative amplitudes on the previous three slides.' 28)
     '<text x="130" y="395" class="math" font-size="42">&#x03B1; = cos(</text>'
     (Fraction 295 360 '&#x03B8;' '2')
@@ -656,7 +693,7 @@ $body = @(
 for ($stateIndex = 0; $stateIndex -lt $stateExamples.Count; $stateIndex++) {
     $state = $stateExamples[$stateIndex]
     $center = 360 + 600 * $stateIndex
-    $sphereX = $center - 150
+    $sphereX = $center - 144
     $endX = 200 + [int]($state.EndX * 160 / 230)
     $endY = 200 + [int]($state.EndY * 160 / 230)
     $body += @(
@@ -665,7 +702,7 @@ for ($stateIndex = 0; $stateIndex -lt $stateExamples.Count; $stateIndex++) {
         } else {
             "<text x='$center' y='465' text-anchor='middle' class='math' font-size='36'>|&#x2009;$($state.Ket)&#x2009;&#x27E9;&#x2002;:&#x2002;&#x03B1; = $($state.Alpha),&#x2002;&#x03B2; = $($state.Beta)</text>"
         }
-        "<g class='bloch-sphere' transform='translate($sphereX 490) scale(.75)'>"
+        "<g class='bloch-sphere' transform='translate($sphereX 490) scale(.72)'>"
         '<g fill="none" stroke="#e7d450" stroke-width="1.4">'
         '<circle cx="200" cy="200" r="160" fill="#091b68"/>'
         '<path d="M360 200C360 233.115 288.306 260 200 260C111.694 260 40 233.115 40 200"/>'
@@ -691,13 +728,13 @@ for ($stateIndex = 0; $stateIndex -lt $stateExamples.Count; $stateIndex++) {
         '<circle cx="200" cy="200" r="5" fill="#ffffff"/>'
         '</g>'
         if ($state.Ket -eq '+') {
-            "<g class='angle-calculation' transform='translate($center 850)'>"
+            "<g class='angle-calculation' transform='translate($center 831)'>"
             '<text x="-230" y="0" class="math" font-size="36">&#x03B8; = 2 arccos(</text>'
             "<g transform='translate(-5 -25) scale(.75)'>$(InvSqrt2 0 0)</g>"
             '<text x="85" y="0" class="math" font-size="36">) = 90&#xB0;</text>'
             '</g>'
         } else {
-            "<text x='$center' y='850' text-anchor='middle' class='math angle-calculation' font-size='36'>&#x03B8; = 2 arccos($($state.Alpha)) = $($state.Angle)&#xB0;</text>"
+            "<text x='$center' y='831' text-anchor='middle' class='math angle-calculation' font-size='36'>&#x03B8; = 2 arccos($($state.Alpha)) = $($state.Angle)&#xB0;</text>"
         }
     ) -join "`n"
 }
@@ -705,7 +742,7 @@ $body += Text 100 925 'Measure from +z. The amplitudes use the half-angle; compl
 SaveSlide 'slide-33.svg' 'From amplitudes to Bloch angles' 'Three wireframe Bloch spheres show ket zero at the north pole, ket one at the south pole, and the equal positive superposition ket plus along positive x. For normalized real nonnegative amplitudes, alpha = cos(theta/2), beta = sin(theta/2), and theta = 2 arccos(alpha). The worked calculations give 0, 180, and 90 degrees respectively, with angle labels and arcs on the spheres. General complex states also require an azimuthal angle for relative phase.' $body '33' 'VECTORS / BLOCH ANGLES'
 
 $body = @(
-    (Text 100 245 'Two qubits. Four basis states.' 68 'heading')
+    (Text 100 245 'Two qubits: four basis states' 68 'heading')
     '<text x="100" y="325" class="math" font-size="32">Ordered basis: |&#x2009;00&#x2009;&#x27E9;,&#x2002;|&#x2009;01&#x2009;&#x27E9;,&#x2002;|&#x2009;10&#x2009;&#x27E9;,&#x2002;|&#x2009;11&#x2009;&#x27E9;</text>'
 ) -join "`n"
 $twoQubitStates = @('00', '01', '10', '11', '++')
@@ -734,10 +771,10 @@ $body += @(
     "<g transform='translate(305 875) scale(.75)'>$(Fraction 0 0 '1' '2' -Compact)</g>"
     '<text x="410" y="910" class="math" font-size="40">(|&#x2009;00&#x2009;&#x27E9;&#x2002;+&#x2002;|&#x2009;01&#x2009;&#x27E9;&#x2002;+&#x2002;|&#x2009;10&#x2009;&#x27E9;&#x2002;+&#x2002;|&#x2009;11&#x2009;&#x27E9;)</text>'
 ) -join "`n"
-SaveSlide 'slide-34.svg' 'Two qubits and the joint state' 'Five four-entry column matrices in the ordered basis ket 00, ket 01, ket 10, ket 11. Each computational-basis state has a single 1 in its corresponding row and zeros elsewhere. The equal positive superposition ket plus plus has amplitude 1/2 in every row and equals one half times the sum of all four basis kets.' $body '34' 'VECTORS / TWO-QUBIT STATES'
+SaveSlide 'slide-34.svg' 'Two qubits and the joint state' 'Five four-entry column matrices in the ordered basis ket 00, ket 01, ket 10, ket 11. Each computational-basis state has a single 1 in its corresponding row and zeros elsewhere. The equal positive superposition ket plus plus has amplitude 1/2 in every row and equals one half times the sum of all four basis kets.' $body '34' 'VECTORS / MULTI-QUBIT STATES'
 
 $body = @(
-    (Text 100 245 'The tensor product.' 68 'heading')
+    (Text 100 245 'The tensor product' 68 'heading')
     '<text x="960" y="365" text-anchor="middle" class="math" font-size="54">|&#x2009;&#x03A8;&#x2009;&#x27E9;&#x2002;=&#x2002;|&#x2009;&#x03C8;&#x2009;&#x27E9;&#x2002;&#x2297;&#x2002;|&#x2009;&#x03C6;&#x2009;&#x27E9;</text>'
     (ColumnVector 500 500 '&#x03B1;' '&#x03B2;' 140 72)
     '<text x="730" y="590" text-anchor="middle" dominant-baseline="central" class="math" font-size="72">&#x2297;</text>'
@@ -746,7 +783,23 @@ $body = @(
     (ColumnVector4 1140 430 @('&#x03B1;&#x03B3;', '&#x03B1;&#x03B4;', '&#x03B2;&#x03B3;', '&#x03B2;&#x03B4;') 280 64)
     '<text x="960" y="850" text-anchor="middle" font-size="30">For product states: multiply each entry by the entire second column.</text>'
 ) -join "`n"
-SaveSlide 'slide-35.svg' 'Tensor product of two state columns' 'The tensor product of the columns alpha beta and gamma delta is the four-entry column alpha gamma, alpha delta, beta gamma, beta delta. This Kronecker product combines two single-qubit pure states into a product state.' $body '35' 'VECTORS / TENSOR PRODUCT'
+SaveSlide 'slide-35.svg' 'Tensor product of two state columns' 'The tensor product of the columns alpha beta and gamma delta is the four-entry column alpha gamma, alpha delta, beta gamma, beta delta. This Kronecker product combines two single-qubit pure states into a product state.' $body '35' 'VECTORS / MULTI-QUBIT STATES'
+
+$body = @(
+    (Text 100 245 'Three qubits: exponential state space' 68 'heading')
+    '<text x="960" y="340" text-anchor="middle" class="math" font-size="44">|&#x03C8;&#x27E9; &#x2297; |&#x03C6;&#x27E9; &#x2297; |&#x03C7;&#x27E9;</text>'
+    (ColumnVector 250 430 '&#x03B1;' '&#x03B2;' 140 72)
+    '<text x="430" y="565" text-anchor="middle" class="math" font-size="64">&#x2297;</text>'
+    (ColumnVector 500 430 '&#x03B3;' '&#x03B4;' 140 72)
+    '<text x="680" y="565" text-anchor="middle" class="math" font-size="64">&#x2297;</text>'
+    (ColumnVector 750 430 '&#x03B5;' '&#x03B6;' 140 72)
+    '<text x="930" y="565" text-anchor="middle" class="math" font-size="64">=</text>'
+    (ColumnVector8 1040 350 @('&#x03B1;&#x03B3;&#x03B5;', '&#x03B1;&#x03B3;&#x03B6;', '&#x03B1;&#x03B4;&#x03B5;', '&#x03B1;&#x03B4;&#x03B6;', '&#x03B2;&#x03B3;&#x03B5;', '&#x03B2;&#x03B3;&#x03B6;', '&#x03B2;&#x03B4;&#x03B5;', '&#x03B2;&#x03B4;&#x03B6;') 220 38)
+    '<text x="1380" y="430" class="math" font-size="38">Ordered basis:</text>'
+    (Lines 1380 480 @('|000⟩ through |111⟩', '8 entries = 2³', 'n qubits: 2ⁿ entries') 30 50)
+    (Text 100 930 'The expanded column doubles per qubit; here its three factors determine all eight entries.' 28)
+) -join "`n"
+SaveSlide 'slide-36.svg' 'Three-qubit tensor product' 'Three single-qubit columns determine all eight entries of this product state, one for each basis ket from |000⟩ through |111⟩ in binary order. An expanded n-qubit pure-state column has 2ⁿ entries; for a product state these are not independent inputs.' $body '36' 'VECTORS / MULTI-QUBIT STATES'
 
 function Matrix4([int]$x, [int]$y, [string[]]$entries) {
     @(
@@ -823,8 +876,10 @@ function GateBloch([int]$x, [int]$y, [double[]]$axis, [double[]]$start, [bool]$r
 }
 
 function GateEntry([int]$x, [int]$y, [string]$value) {
-    if ($value -in '1/sqrt(2)', '-1/sqrt(2)') {
-        $numerator = if ($value.StartsWith('-')) { '&#x2212;1' } else { '1' }
+    if ($value -eq '-1/sqrt(2)') {
+        "<text x='$x' y='$($y + 16)' text-anchor='middle' class='math' font-size='44'>&#x2212;1/&#x221A;2</text>"
+    } elseif ($value -eq '1/sqrt(2)') {
+        $numerator = '1'
         "<g class='gate-fraction' transform='translate($($x - 40) $($y - 20)) scale(.8)'>$(Fraction 0 0 $numerator '&#x221A;2')</g>"
     } else {
         "<text x='$x' y='$($y + 16)' text-anchor='middle' class='math' font-size='48'>$value</text>"
@@ -908,9 +963,9 @@ $gates = @(
 for ($i = 0; $i -lt $gates.Count; $i++) {
     $gate = $gates[$i]
     $name = $gate.Name
-    $number = 37 + 3 * $i
+    $number = 38 + 3 * $i
     $body = @(
-        (Text 100 245 "$name gate: circuit and matrix." 68 'heading')
+        (Text 100 245 "$name gate: circuit and unitary transformation" 68 'heading')
         (Text 100 315 $(if ($name -eq 'Y') { 'Pauli Y / circuit kets shown up to global phase' } else { $gate.Label }) 28)
         "<text x='540' y='465' text-anchor='middle' class='math' font-size='54'>|$($gate.CircuitInput)&#x27E9;</text>"
         '<path d="M620 450H1300" stroke="#e2e7f4" stroke-width="4"/>'
@@ -924,10 +979,10 @@ for ($i = 0; $i -lt $gates.Count; $i++) {
         "<text x='1120' y='795' class='math' font-size='40'>$($gate.One)</text>"
         '</g>'
     ) -join "`n"
-    SaveSlide ('slide-{0:00}.svg' -f $number) "$name gate: circuit and matrix" "$($gate.Label) circuit with input and output kets, its transformation matrix, and its action on both basis states." $body "$number" "QUANTUM LOGIC / $name / CIRCUIT"
+    SaveSlide ('slide-{0:00}.svg' -f $number) "$name gate: circuit and unitary transformation" "$($gate.Label) circuit with input and output kets, its unitary transformation, and its action on both basis states." $body "$number" "QUANTUM LOGIC / GATES AND CIRCUITS"
 
     $body = @(
-        (Text 100 245 "$name gate: multiply and reverse." 68 'heading')
+        (Text 100 245 "$name gate: multiply and reverse" 68 'heading')
         "<text x='100' y='315' class='math' font-size='36'>$($gate.InputKet) &#x2192; $($gate.OutputKet) &#x2192; $($gate.InputKet)</text>"
         (Text 100 955 'Every gate is unitary: it keeps the vector normalized and can always be undone.' 28)
     ) -join "`n"
@@ -944,10 +999,10 @@ for ($i = 0; $i -lt $gates.Count; $i++) {
             "<text x='1420' y='$($y + 140)' class='math' font-size='48'>$(if ($direction -eq 0) { $gate.OutputKet } else { $gate.InputKet })</text>"
         ) -join "`n"
     }
-    SaveSlide ('slide-{0:00}.svg' -f ($number + 1)) "$name gate: matrix multiplication" "$($gate.Label) matrix multiplication on a concrete input and output column, then back to the original state. All normalization factors are written inside the matrix and state columns; Y retains its imaginary phase. A footnote states that every gate is unitary: it keeps the vector normalized and can always be undone." $body "$($number + 1)" "QUANTUM LOGIC / $name / MULTIPLICATION"
+    SaveSlide ('slide-{0:00}.svg' -f ($number + 1)) "$name gate: unitary transformation" "$($gate.Label) unitary transformation applied to a concrete input column, then reversed. Every gate preserves normalization and can be undone." $body "$($number + 1)" "QUANTUM LOGIC / GATES AND CIRCUITS"
 
     $body = @(
-        (Text 100 245 "$name gate: the Bloch-sphere rotation." 64 'heading')
+        (Text 100 245 "$name gate: the Bloch-sphere rotation" 64 'heading')
         (Text 100 315 $gate.Rotation 32)
         $gateArrow
         (GateBloch 530 610 $gate.Axis $gate.Start)
@@ -956,14 +1011,16 @@ for ($i = 0; $i -lt $gates.Count; $i++) {
         "<text x='950' y='600' class='math' font-size='38'>$($gate.BlochRule)</text>"
         (Lines 950 690 @('White vector: input. Yellow vector: output.', 'Yellow curve: rotation path.', 'Dashed blue line: the rotation axis.') 28 45)
         (Text 100 905 $gate.Note 28)
+        (Text 950 820 'Coordinates: (x, y, z) mean the Bloch-vector components.' 24)
+        (Text 950 855 'The rule applies the gate to that vector and gives the new direction.' 24)
         (Text 100 950 'Shown up to global phase; a 3D surface point can project inside the circle.' 28)
     ) -join "`n"
-    SaveSlide ('slide-{0:00}.svg' -f ($number + 2)) "$name gate: Bloch-sphere rotation" "$($gate.Label): $($gate.Rotation) The trajectory is an orthographic projection of a three-dimensional half-turn. Global phase is not visible on the Bloch sphere." $body "$($number + 2)" "QUANTUM LOGIC / $name / BLOCH SPHERE"
+    SaveSlide ('slide-{0:00}.svg' -f ($number + 2)) "$name gate: Bloch-sphere rotation" "$($gate.Label): $($gate.Rotation) The (x, y, z) rule maps the three components of the input Bloch vector to the output vector. Global phase is not visible on the Bloch sphere." $body "$($number + 2)" "QUANTUM LOGIC / GATES AND CIRCUITS"
 }
 
 $cnotMatrix = @('1', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '1', '0', '0', '1', '0')
 $body = @(
-    (Text 100 245 'CNOT: circuit and matrix.' 68 'heading')
+    (Text 100 245 'CNOT: circuit and unitary transformation' 68 'heading')
     (Text 100 315 'Two qubits: the first is the control, the second is the target.' 30)
     '<path d="M620 415H1300 M620 525H1300 M960 415V525" stroke="#e2e7f4" stroke-width="4"/>'
     '<circle cx="960" cy="415" r="12" fill="#e7d450"/>'
@@ -980,10 +1037,10 @@ $body = @(
     '<text x="1120" y="795" class="math" font-size="38">CNOT|11&#x27E9; = |10&#x27E9;</text>'
     '</g>'
 ) -join "`n"
-SaveSlide 'slide-49.svg' 'CNOT gate: circuit and matrix' 'Controlled NOT with the first qubit as control and second as target. The four-by-four matrix fixes 00 and 01 and exchanges 10 and 11.' $body '49' 'QUANTUM LOGIC / CNOT / CIRCUIT'
+SaveSlide 'slide-50.svg' 'CNOT gate: circuit and unitary transformation' 'Controlled NOT with the first qubit as control and second as target. The four-by-four unitary transformation fixes 00 and 01 and exchanges 10 and 11.' $body '50' 'QUANTUM LOGIC / GATES AND CIRCUITS'
 
 $body = @(
-    (Text 100 245 'CNOT: multiply and reverse.' 68 'heading')
+    (Text 100 245 'CNOT: multiply and reverse' 68 'heading')
     '<text x="100" y="315" class="math" font-size="36">|10&#x27E9; &#x2192; |11&#x27E9; &#x2192; |10&#x27E9;</text>'
     (Text 100 955 'CNOT is unitary too: it permutes the basis states and is its own inverse.' 28)
 ) -join "`n"
@@ -1000,7 +1057,7 @@ for ($direction = 0; $direction -lt 2; $direction++) {
         "<text x='1420' y='$($y + 140)' class='math' font-size='48'>|1$(if ($direction -eq 0) { '1' } else { '0' })&#x27E9;</text>"
     ) -join "`n"
 }
-SaveSlide 'slide-50.svg' 'CNOT gate: matrix multiplication' 'Concrete forward and reverse four-by-four matrix multiplication maps ket 10 to ket 11 and back. CNOT is its own inverse.' $body '50' 'QUANTUM LOGIC / CNOT / MULTIPLICATION'
+SaveSlide 'slide-51.svg' 'CNOT gate: unitary transformation' 'Concrete forward and reverse four-by-four unitary transformations map ket 10 to ket 11 and back. CNOT is its own inverse.' $body '51' 'QUANTUM LOGIC / GATES AND CIRCUITS'
 
 function GateColumn4([int]$x, [int]$y, [string[]]$entries) {
     # Four-entry column, 280 tall; 1/sqrt(2) entries render as compact fractions.
@@ -1022,7 +1079,7 @@ function GateColumn4([int]$x, [int]$y, [string[]]$entries) {
 $bellKet = '(|00&#x27E9; + |11&#x27E9;)'
 $plusZeroKet = '(|00&#x27E9; + |10&#x27E9;)'
 $body = @(
-    (Text 100 245 'CNOT: entangling two qubits.' 68 'heading')
+    (Text 100 245 'CNOT: entangling two qubits' 68 'heading')
     (Text 100 315 'H puts the control in superposition; CNOT then ties the target to it.' 30)
     '<path d="M620 415H1300 M620 525H1300 M1060 415V525" stroke="#e2e7f4" stroke-width="4"/>'
     '<rect x="735" y="360" width="130" height="110" rx="10" fill="#091b68" stroke="#e7d450" stroke-width="3"/>'
@@ -1044,21 +1101,21 @@ $body = @(
     (Text 735 695 '2 / H ON THE CONTROL' 24 'label')
     "<g transform='translate(735 735) scale(.6)'>$(InvSqrt2 0 0)</g>"
     "<text x='800' y='755' class='math' font-size='30'>$plusZeroKet = |+&#x27E9; &#x2297; |0&#x27E9;</text>"
-    (Lines 735 805 @('The control is 0 and 1 at once;', 'the target is still 0 in both branches.') 25 40)
+    (Lines 735 805 @('The control is in |+⟩;', 'the target is still in |0⟩.') 25 40)
     (Text 1335 695 '3 / CNOT' 24 'label')
     "<g transform='translate(1335 735) scale(.6)'>$(InvSqrt2 0 0)</g>"
     "<text x='1400' y='755' class='math' font-size='30'>$bellKet</text>"
-    (Lines 1335 805 @('Only the control-1 branch flips its target;', 'now 00 and 11 are the only outcomes.') 25 40)
+    (Lines 1335 805 @('CNOT maps |10⟩ to |11⟩;', 'it leaves |00⟩ unchanged.') 25 40)
     "<path d='M635 755H685' fill='none' stroke='#e7d450' stroke-width='4' marker-end='url(#arrow)'/>"
     "<path d='M1235 755H1285' fill='none' stroke='#e7d450' stroke-width='4' marker-end='url(#arrow)'/>"
-    (Text 100 950 'Measure either qubit and the other is fixed: no product of two single-qubit columns gives this state.' 26)
+    (Text 100 950 'Measure both in Z: 00 and 11 each have probability ½. The Bell state itself cannot factor.' 26)
 ) -join "`n"
-SaveSlide 'slide-51.svg' 'CNOT gate: entangling two qubits' 'Two-wire circuit in the same style as the CNOT slide: both qubits start in ket zero, a Hadamard gate acts on the control wire, then CNOT uses the first qubit as control and the second as target. A brace joins both output wires to the Bell state (ket 00 plus ket 11) divided by sqrt(2). Three panels trace the state: start in ket 00, after H the state is (ket 00 plus ket 10) over sqrt(2), and after CNOT only the ket 10 branch flips its target, giving (ket 00 plus ket 11) over sqrt(2). A footnote notes that the outcomes are correlated and that no product of single-qubit columns gives this state.' $body '51' 'QUANTUM LOGIC / CNOT / ENTANGLEMENT'
+SaveSlide 'slide-52.svg' 'CNOT gate: entangling two qubits' 'H puts the control in ket plus while the target stays in ket zero. CNOT produces the nonfactorable Bell state (ket 00 plus ket 11) divided by sqrt(2). Measuring both qubits in the computational basis yields 00 or 11 with equal probability.' $body '52' 'QUANTUM LOGIC / GATES AND CIRCUITS'
 
 $hadamardMatrix = @('1/sqrt(2)', '1/sqrt(2)', '1/sqrt(2)', '-1/sqrt(2)')
 $body = @(
-    (Text 100 245 'Bell state, part 1: H, then tensor.' 68 'heading')
-    (Text 100 315 'STEP 1 / H ON THE CONTROL QUBIT' 20 'label')
+    (Text 100 245 'Bell state, part 1: H, then tensor' 68 'heading')
+    (Text 100 315 'STEP 1 / H ON THE CONTROL QUBIT (MATRIX: 38; MULTIPLICATION: 39)' 20 'label')
     (GateMatrix2 380 335 $hadamardMatrix)
     (GateColumn2 800 335 @('1', '0'))
     "<text x='1010' y='475' class='math' font-size='48'>=</text>"
@@ -1076,11 +1133,11 @@ $body = @(
     "<text x='1340' y='790' class='math' font-size='40'>$plusZeroKet</text>"
     (Text 100 965 'Still a product state: each joint entry is one amplitude from each qubit multiplied.' 26)
 ) -join "`n"
-SaveSlide 'slide-52.svg' 'Bell state, part 1: H and tensor product' 'Step 1 multiplies the Hadamard matrix by the column (1, 0) to get (1/sqrt(2), 1/sqrt(2)), which is ket plus. Step 2 takes the tensor product of that column with the target column (1, 0), giving the four-entry column (1/sqrt(2), 0, 1/sqrt(2), 0), equal to (ket 00 plus ket 10) divided by sqrt(2). A footnote notes that this is still a product state.' $body '52' 'QUANTUM LOGIC / CNOT / ENTANGLEMENT STEP 1 AND 2'
+SaveSlide 'slide-53.svg' 'Bell state, part 1: H and tensor product' 'Step 1 multiplies the Hadamard unitary transformation by the column (1, 0) to get (1/sqrt(2), 1/sqrt(2)), which is ket plus. Step 2 takes the tensor product with the target column (1, 0), giving (1/sqrt(2), 0, 1/sqrt(2), 0), still a product state.' $body '53' 'QUANTUM LOGIC / GATES AND CIRCUITS'
 
 $body = @(
-    (Text 100 245 'Bell state, part 2: CNOT entangles.' 68 'heading')
-    (Text 100 315 'The 4 × 4 matrix acts on the joint column; only the third and fourth rows swap.' 30)
+    (Text 100 245 'Bell state, part 2: CNOT entangles' 68 'heading')
+    (Text 100 315 'The 4 × 4 unitary transformation acts on the joint column; only the third and fourth rows swap.' 30)
     (Text 100 385 'STEP 3 / CNOT ON THE JOINT STATE' 20 'label')
     (Matrix4 380 410 $cnotMatrix)
     (GateColumn4 800 390 @('1/sqrt(2)', '0', '1/sqrt(2)', '0'))
@@ -1091,15 +1148,15 @@ $body = @(
     "<text x='1500' y='545' class='math' font-size='40'>$bellKet</text>"
     (Panel 100 700 840 175)
     (Panel 980 700 840 175)
-    (Text 135 750 'MEASUREMENT' 20 'label')
+    (Text 135 750 'MEASURE BOTH IN THE Z BASIS' 20 'label')
     '<text x="135" y="800" class="math" font-size="30">|00&#x27E9;: 50%&#x2003;|11&#x27E9;: 50%&#x2003;|01&#x27E9;, |10&#x27E9;: never</text>'
-    (Text 135 845 'The two outcomes always agree.' 25)
+    (Text 135 845 'A 50:50 classical mixture gives these counts too.' 25)
     (Text 1015 750 'NOT A PRODUCT STATE' 20 'label')
     '<text x="1015" y="800" class="math" font-size="30">&#x03B1;&#x03B3; = &#x03B2;&#x03B4; &#x2260; 0&#x2003;but&#x2003;&#x03B1;&#x03B4; = &#x03B2;&#x03B3; = 0</text>'
     (Text 1015 845 'No two single-qubit columns multiply to this.' 25)
-    (Text 100 955 'Example 5 in Q# prints exactly these two amplitudes: 0.7071 for 00 and for 11.' 28)
+    (Text 100 955 'Example 5 displays each nonzero amplitude, 1/√2, rounded to 0.7071.' 28)
 ) -join "`n"
-SaveSlide 'slide-53.svg' 'Bell state, part 2: CNOT entangles' 'Step 3 multiplies the four-by-four CNOT matrix by the column (1/sqrt(2), 0, 1/sqrt(2), 0). Swapping the last two rows gives (1/sqrt(2), 0, 0, 1/sqrt(2)), which is (ket 00 plus ket 11) divided by sqrt(2). A measurement panel states 50 percent for 00, 50 percent for 11, and never 01 or 10, so the outcomes always agree. A second panel shows why this is not a product state: alpha gamma equals beta delta and is nonzero, while alpha delta equals beta gamma equals zero, which no single-qubit columns can satisfy. A footnote links to Q# example 5.' $body '53' 'QUANTUM LOGIC / CNOT / ENTANGLEMENT STEP 3'
+SaveSlide 'slide-54.svg' 'Bell state, part 2: CNOT entangles' 'CNOT swaps the last two rows to give (1/sqrt(2), 0, 0, 1/sqrt(2)). Measuring both qubits in Z gives 00 or 11 with equal probability, just like a classical mixture. What distinguishes this Bell state is the coherent superposition: no product of two single-qubit columns gives these amplitudes.' $body '54' 'QUANTUM LOGIC / GATES AND CIRCUITS'
 
 $codeColors = @{
     namespace = '#e7d450'; import = '#e7d450'; operation = '#8da9ff'; use = '#8da9ff'
@@ -1112,35 +1169,35 @@ $codeColors = @{
 }
 $codeExamples = @(
     @{
-        Number = 1; Slide = 55; Amplitudes = @(1.0, 0.0); Title = 'Your first qubit in Q#'
+        Number = 1; Slide = 56; Amplitudes = @(1.0, 0.0); Title = 'Your first qubit in Q#'
         Notes = @('Default state: ket zero.', 'Diagnostics, not measurement.', 'Only nonzero amplitudes are listed.')
         Description = 'Syntax-highlighted Q# from the runnable example-1 project. The operation allocates one qubit, automatically initialized to ket zero, and calls Std.Diagnostics.DumpMachine to print the simulator state. A drawn table lists the single nonzero basis state: ket zero has amplitude 1 and probability 100 percent with phase zero. Diagnostics inspect the local simulator without measuring the qubit.'
     }
     @{
-        Number = 2; Slide = 56; Amplitudes = @(0.0, 1.0); Title = 'Flip a qubit with the X gate'
+        Number = 2; Slide = 57; Amplitudes = @(0.0, 1.0); Title = 'Flip a qubit with the X gate'
         Notes = @('X flips ket zero to ket one.', 'Dump the state before resetting.', 'Reset to zero before releasing.')
         Description = 'Syntax-highlighted Q# from the runnable example-2 project. The operation allocates a qubit in ket zero, applies X, and prints the simulator state with DumpMachine. A drawn table lists the single nonzero basis state: ket one has amplitude 1 and probability 100 percent with phase zero. Reset returns the qubit to ket zero after diagnostics so it can be safely released.'
     }
     @{
-        Number = 3; Slide = 57; Amplitudes = @([Math]::Sqrt(0.5), [Math]::Sqrt(0.5)); Title = 'Create a superposition with H'
+        Number = 3; Slide = 58; Amplitudes = @([Math]::Sqrt(0.5), [Math]::Sqrt(0.5)); Title = 'Create a superposition with H'
         Notes = @('H creates an equal superposition.', 'Both outcomes have 50% probability.', 'Dump the state before resetting.')
         Description = 'Syntax-highlighted Q# from the runnable example-3 project. The operation allocates a qubit in ket zero and applies H to prepare ket plus. A drawn table shows both ket zero and ket one with amplitude 1/sqrt(2), displayed as 0.7071 + 0i, probability 50 percent, and phase zero. DumpMachine inspects this superposition before Reset returns the qubit to zero for safe release.'
     }
     @{
-        Number = 4; Slide = 58; Amplitudes = @(0.5, [Math]::Sqrt(0.75)); Title = 'A 25% / 75% superposition with Ry'
+        Number = 4; Slide = 59; Amplitudes = @(0.5, [Math]::Sqrt(0.75)); Title = 'A 25% / 75% superposition with Ry'
         Notes = @('Ry rotates by 120 degrees.', 'Probabilities: 25% zero, 75% one.', 'Both amplitudes are real and positive.')
         Description = 'Syntax-highlighted Q# from the runnable example-4 project. Starting in ket zero, Ry rotates by 2 pi/3 radians, or 120 degrees. The resulting amplitudes are 1/2 for ket zero and sqrt(3)/2 for ket one, displayed as 0.5000 and 0.8660. The table shows probabilities 25 and 75 percent and zero phase for both states. DumpMachine precedes Reset for safe release.'
     }
     @{
-        Number = 5; Slide = 59; Amplitudes = @([Math]::Sqrt(0.5), 0.0, 0.0, [Math]::Sqrt(0.5)); Title = 'Entangle two qubits with H and CNOT'
-        Notes = @('H then CNOT creates a Bell state.', 'Only 00 and 11 occur: 50% each.', 'Measure both: their outcomes agree.')
-        Description = 'Syntax-highlighted Q# from the runnable example-5 project. Two qubits start in ket 00. H on the first qubit followed by CNOT prepares the entangled Bell state (ket 00 plus ket 11) divided by sqrt(2). The simulator table lists the two nonzero basis states: 00 and 11 each have amplitude 0.7071 and probability 50 percent with phase zero; 01 and 10 have zero amplitude and are not listed. DumpMachine inspects the joint state before ResetAll safely releases both qubits.'
+        Number = 5; Slide = 60; Amplitudes = @([Math]::Sqrt(0.5), 0.0, 0.0, [Math]::Sqrt(0.5)); Title = 'Entangle two qubits with H and CNOT'
+        Notes = @('H then CNOT creates a Bell state.', 'Measuring both in Z: 00 or 11, 50% each.', 'DumpMachine inspects amplitudes, not shots.')
+        Description = 'H then CNOT prepares the Bell state (ket 00 plus ket 11) divided by sqrt(2). DumpMachine inspects amplitudes, not measurement shots: the two nonzero amplitudes are exactly 1/sqrt(2), displayed as 0.7071. Measuring both in the computational basis would give 00 or 11 with 50 percent probability each.'
     }
 )
 foreach ($example in $codeExamples) {
-    $codePath = "example-$($example.Number)\src\Main.qs"
+    $codePath = "examples\example-$($example.Number)\src\Main.qs"
     $body = @(
-        (Text 100 245 "$($example.Title)." 68 'heading')
+        (Text 100 245 $example.Title 68 'heading')
         '<style>.qsharp-code{font-family:Consolas,"Courier New",monospace;fill:#e2e7f4;white-space:pre}.simulator-table text{font-family:"STIX Two Math","Cambria Math",serif;font-size:30px;font-weight:400;text-anchor:middle;dominant-baseline:central}</style>'
         (Panel 100 345 800 540)
         (Text 155 390 $codePath 20 'label')
@@ -1201,7 +1258,7 @@ foreach ($example in $codeExamples) {
 $body = @(
     (Text 100 245 'Shor''s algorithm in Q#' 64 'heading')
     (Text 100 305 'The quantum routine estimates a period; classical arithmetic turns it into factors.' 28)
-    (Text 100 350 'example-6\src\shor.qs  /  input n = 143' 20 'label')
+    (Text 100 350 'examples\example-6\src\shor.qs  /  worked input: 143' 20 'label')
     (Panel 100 390 520 360)
     (Panel 700 390 520 360)
     (Panel 1300 390 520 360)
@@ -1210,23 +1267,23 @@ $body = @(
     (Text 735 445 '2 / FIND THE PERIOD' 24 'label')
     (Lines 735 505 @('Estimate r such that aʳ ≡ 1', '(mod 143). Controlled modular', 'multiplication and semiclassical', 'phase estimation produce a', 'frequency estimate.') 25 46)
     (Text 1335 445 '3 / RECOVER FACTORS' 24 'label')
-    (Lines 1335 505 @('Continued fractions recover r.', 'For even r, use gcd(a^(r/2) ± 1,', '143) to find non-trivial factors.', 'Retry if the period is unsuitable.') 25 48)
+    (Lines 1335 505 @('Continued fractions give a', 'candidate period r. For even r,', 'test gcd(a^(r/2) ± 1, 143).', 'Retry if no factor is found.') 25 48)
     "<path d='M635 565H685 M1235 565H1285' fill='none' stroke='#e7d450' stroke-width='4' marker-end='url(#arrow)'/>"
     (Panel 100 785 1720 92)
     (Text 155 845 'RESULT  /  143 = 11 × 13' 34 'heading')
-    (Text 100 920 'Educational example with a small input; Shor combines quantum period finding with classical post-processing.' 24)
+    (Text 100 920 'Call Sample.FactorSemiprimeInteger(143) for this example. Sample.Main() uses 999997.' 24)
 ) -join "`n"
-SaveSlide 'slide-60.svg' 'Example 6: Shor''s algorithm in Q#' "Explanation of example 6: Shor's algorithm picks a base, uses quantum phase estimation to estimate its multiplicative period, then applies continued fractions and greatest common divisors to recover the factors of 143." $body '60' 'QUANTUM CODE / EXAMPLE 6'
+SaveSlide 'slide-61.svg' 'Example 6: Shor''s algorithm in Q#' "Worked input: 143. If the random base shares no factor with 143, phase estimation and continued fractions give a candidate period. An even candidate can reveal a factor through a greatest common divisor; unsuitable attempts are retried. Sample.FactorSemiprimeInteger(143) returns 11 and 13 in either order; Sample.Main() uses 999997." $body '61' 'QUANTUM CODE / EXAMPLE 6'
 
 $body = @(
     (Text 100 245 'Any questions?' 64 'heading')
     '<rect x="100" y="295" width="180" height="8" fill="url(#accent)"/>'
     "<a href='$repoUrl'><image x='100' y='365' width='440' height='440' href='$qrCode'/></a>"
     '<g class="closing-takeaways" font-size="34" text-anchor="middle" transform="translate(0 53)">'
-    '<text x="936.45" y="455">Qubits can be represented by <tspan fill="#e7d450">vectors</tspan></text>'
+    '<text x="936.45" y="455">Pure states are represented by <tspan fill="#e7d450">vectors</tspan></text>'
     '<text x="936.45" y="515">Gates apply unitary <tspan fill="#e7d450">transformations</tspan></text>'
-    '<text x="936.45" y="575">Measurement picks one basis state at random;</text>'
-    '<text x="936.45" y="635">algorithms make the <tspan fill="#e7d450">desired outcome</tspan> likely.</text>'
+    '<text x="936.45" y="575">In the chosen basis, P(k) = |aₖ|²</text>'
+    '<text x="936.45" y="635">Algorithms can favor <tspan fill="#e7d450">useful outcomes</tspan></text>'
     '</g>'
     '<defs><linearGradient id="closing-vector-accent" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="138" y2="-184"><stop stop-color="#8da9ff"/><stop offset="1" stop-color="#e7d450"/></linearGradient><marker id="closing-vector-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#e7d450"/></marker></defs>'
     '<g class="closing-bloch-sphere" transform="translate(1560 545) scale(.65)">'
@@ -1245,7 +1302,7 @@ $body = @(
     '</g>'
     (Text 100 940 'Johnny Hooyberghs / Qubits Are Vectors Too' 26)
 ) -join "`n"
-SaveSlide 'slide-61.svg' 'Thank you and questions' 'Closing slide with a thank-you heading, questions, a linked repository QR code, and a colorful Bloch sphere with a state vector. Qubits can be represented by vectors. Gates apply unitary transformations. Measurement picks one basis state at random; algorithms make the desired outcome likely.' $body '61' 'THANK YOU'
+SaveSlide 'slide-62.svg' 'Thank you and questions' 'Pure states are represented by vectors and gates apply unitary transformations. In the chosen basis the probability of outcome k is the squared magnitude of its amplitude; algorithms can favor useful outcomes. Scan or click the QR code for this CloudBrew repository.' $body '62' 'THANK YOU'
 
 $body = @(
     (Text 100 245 'Your slide title' 72 'heading')
@@ -1260,5 +1317,5 @@ SaveSlide 'slide-template.svg' 'Reusable content template' 'Blank branded conten
 if ($OnlySlides.Count -gt 0) {
     Write-Host "Built selected slides in $slides"
 } else {
-    Write-Host "Built 61 starter slides and slide-template.svg in $slides"
+    Write-Host "Built 62 starter slides and slide-template.svg in $slides"
 }

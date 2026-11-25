@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 1920 1080" role="img" aria-labelledby="title description">
 <title id="title">Johnny Hooyberghs</title>
-<desc id="description">Johnny Hooyberghs, Microsoft MVP and speaker, with his professional background and interests. A subtle silhouette of Belgium in the background marks his home country.</desc>
+<desc id="description">Johnny Hooyberghs is a Microsoft MVP and public speaker with 19 years of professional experience spanning .NET application development, Azure Cloud, GenAI, training, and quantum-computing interest.</desc>
 <defs>
   <clipPath id="speaker-photo-clip"><circle cx="360" cy="560" r="215"/></clipPath>
   <style>
@@ -23,7 +23,7 @@
   <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
     <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#304580" stroke-width="1" opacity=".25"/>
   </pattern>
-  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
     <path d="M 0 0 L 10 5 L 0 10 Z" fill="#e7d450"/>
   </marker>
 </defs>
@@ -50,7 +50,7 @@
 <text x="780" y="390" font-size="34" class="">Focus on .NET custom application development,</text>
 <text x="780" y="434" font-size="34" class="">Azure Cloud, and GenAI</text>
 <circle cx='750' cy='508' r='7' fill='#e7d450'/>
-<text x="780" y="518" font-size="34" class="">18 years of professional experience as a</text>
+<text x="780" y="518" font-size="34" class="">19 years of professional experience as a</text>
 <text x="780" y="562" font-size="34" class="">software enthusiast</text>
 <circle cx='750' cy='636' r='7' fill='#e7d450'/>
 <text x="780" y="646" font-size="34" class="">Interested in Quantum Computing</text>
